@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matt</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #0f1020; color: #e8e8f0; line-height: 1.6; }
+  main { max-width: 720px; margin: 0 auto; padding: 80px 24px; }
+  h1 { font-size: 48px; color: #4ee1c1; margin-bottom: 8px; }
+  .intro { font-size: 20px; color: #aab; margin-bottom: 56px; }
+  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: .12em; color: #889; margin-bottom: 16px; }
+  .projects { display: grid; gap: 16px; }
+  .card { display: block; padding: 20px 24px; background: #1b1d3a; border-radius: 12px; text-decoration: none; color: inherit; border: 1px solid #2a2c50; transition: transform .15s, border-color .15s; }
+  .card:hover { transform: translateY(-2px); border-color: #4ee1c1; }
+  .card h3 { font-size: 20px; color: #fff; margin-bottom: 4px; }
+  .card p { color: #aab; }
+  footer { margin-top: 80px; color: #667; font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Hi, I'm Matt.</h1>
+  <p class="intro">This is my corner of the internet, where I build and share small experiments.</p>
+
+  <h2>Experiments</h2>
+  <div class="projects">
+    <a class="card" href="dodge/">
+      <h3>Dodge!</h3>
+      <p>An arcade game: dodge the falling rocks and grab the stars. Works on desktop and phone.</p>
+    </a>
+    <!-- To add a new experiment, copy the card above and change the link, title and description. -->
+  </div>
+
+  <footer>Made by Matt</footer>
+</main>
+</body>
+</html>

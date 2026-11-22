@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Dodge!</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #0f1020; color: #fff; font-family: system-ui, sans-serif; overflow: hidden; touch-action: none; }
+  #wrap { display: flex; align-items: center; justify-content: center; height: 100%; }
+  canvas { background: linear-gradient(#1b1d3a, #2a1f4a); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.5); max-width: 100vw; max-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="game" width="480" height="720"></canvas></div>
+<script>
+// ===== Setup =====
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+
+// Scale canvas to fit the screen while keeping its shape
+function fit() {
+  const s = Math.min(window.innerWidth / W, window.innerHeight / H, 1.2);
+  canvas.style.width = W * s + 'px';
+  canvas.style.height = H * s + 'px';
+}
+window.addEventListener('resize', fit); fit();
+
+// ===== Game state =====
+let state = 'menu';            // 'menu' | 'playing' | 'over'
+let player, rocks, stars, score, best = 0, spawnTimer, speedUp, lastTime;
+
+function reset() {
+  player = { x: W / 2, y: H - 80, r: 18, speed: 380 };
+  rocks = [];
+  stars = [];
+  score = 0;
+  spawnTimer = 0;
+  speedUp = 1;
+}
+
+// ===== Input (keyboard + mouse/touch) =====
+const keys = {};
+let pointerX = null;
+addEventListener('keydown', e => {
+  keys[e.key] = true;
+  if ((e.key === ' ' || e.key === 'Enter') && state !== 'playing') start();
+});
+addEventListener('keyup', e => keys[e.key] = false);
+
+function toCanvasX(clientX) {
+  const rect = canvas.getBoundingClientRect();
+  return (clientX - rect.left) * (W / rect.width);
+}
+canvas.addEventListener('pointerdown', e => { if (state !== 'playing') start(); pointerX = toCanvasX(e.clientX); });
+canvas.addEventListener('pointermove', e => { if (e.buttons || e.pointerType === 'touch') pointerX = toCanvasX(e.clientX); });
+canvas.addEventListener('pointerup', () => pointerX = null);
+
+function start() { reset(); state = 'playing'; }
+
+// ===== Spawning =====
+function spawnRock() {
+  const r = 14 + Math.random() * 22;
+  rocks.push({
+    x: r + Math.random() * (W - r * 2),
+    y: -r,
+    r,
+    vy: (160 + Math.random() * 140) * speedUp,
+    spin: Math.random() * Math.PI,
+    vs: (Math.random() - 0.5) * 4
+  });
+}
+function spawnStar() {
+  stars.push({ x: 20 + Math.random() * (W - 40), y: -12, r: 10, vy: 180 * speedUp });
+}
+
+// ===== Update =====
+function update(dt) {
+  if (state !== 'playing') return;
+
+  // Move player
+  let dx = 0;
+  if (keys['ArrowLeft'] || keys['a']) dx -= 1;
+  if (keys['ArrowRight'] || keys['d']) dx += 1;
+  if (pointerX !== null) {
+    const diff = pointerX - player.x;
+    dx = Math.abs(diff) < 4 ? 0 : Math.sign(diff) * Math.min(1, Math.abs(diff) / 40);
+  }
+  player.x += dx * player.speed * dt;
+  player.x = Math.max(player.r, Math.min(W - player.r, player.x));
+
+  // Difficulty ramps up over time
+  score += dt * 10;
+  speedUp = 1 + score / 300;
+
+  spawnTimer -= dt;
+  if (spawnTimer <= 0) {
+    spawnRock();
+    if (Math.random() < 0.12) spawnStar();
+    spawnTimer = Math.max(0.18, 0.7 - score / 800);
+  }
+
+  // Rocks
+  for (const r of rocks) { r.y += r.vy * dt; r.spin += r.vs * dt; }
+  rocks = rocks.filter(r => r.y - r.r < H);
+
+  // Stars (bonus points)
+  for (const s of stars) s.y += s.vy * dt;
+  stars = stars.filter(s => {
+    if (dist(s, player) < s.r + player.r) { score += 50; return false; }
+    return s.y - s.r < H;
+  });
+
+  // Collisions
+  for (const r of rocks) {
+    if (dist(r, player) < r.r * 0.85 + player.r * 0.85) {
+      state = 'over';
+      best = Math.max(best, Math.floor(score));
+    }
+  }
+}
+const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+// ===== Draw =====
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  if (state === 'playing' || state === 'over') {
+    // Stars
+    for (const s of stars) drawStar(s.x, s.y, s.r, '#ffd84a');
+    // Rocks
+    for (const r of rocks) {
+      ctx.save(); ctx.translate(r.x, r.y); ctx.rotate(r.spin);
+      ctx.fillStyle = '#ff5d73';
+      ctx.beginPath();
+      for (let i = 0; i < 7; i++) {
+        const a = (i / 7) * Math.PI * 2, rr = r.r * (0.8 + (i % 2) * 0.2);
+        ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr);
+      }
+      ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+    // Player
+    ctx.fillStyle = '#4ee1c1';
+    ctx.beginPath(); ctx.arc(player.x, player.y, player.r, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#0f1020';
+    ctx.beginPath(); ctx.arc(player.x - 6, player.y - 4, 3, 0, Math.PI * 2); ctx.arc(player.x + 6, player.y - 4, 3, 0, Math.PI * 2); ctx.fill();
+
+    // Score
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 28px system-ui'; ctx.textAlign = 'left';
+    ctx.fillText(Math.floor(score), 20, 44);
+    ctx.font = '16px system-ui'; ctx.fillStyle = '#aab';
+    ctx.fillText('Best: ' + best, 20, 68);
+  }
+
+  if (state === 'menu') {
+    centerText('DODGE!', H / 2 - 60, 64, '#4ee1c1');
+    centerText('Avoid the red rocks. Grab the gold stars.', H / 2, 18, '#ccd');
+    centerText('← → or A/D to move · drag on phones', H / 2 + 30, 16, '#99a');
+    centerText('Click, tap, or press Space to start', H / 2 + 90, 20, '#fff');
+  }
+  if (state === 'over') {
+    ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0, 0, W, H);
+    centerText('GAME OVER', H / 2 - 50, 52, '#ff5d73');
+    centerText('Score: ' + Math.floor(score), H / 2 + 5, 26, '#fff');
+    centerText('Click, tap, or press Space to try again', H / 2 + 60, 18, '#ccd');
+  }
+}
+function centerText(t, y, size, color) {
+  ctx.fillStyle = color; ctx.font = `bold ${size}px system-ui`; ctx.textAlign = 'center';
+  ctx.fillText(t, W / 2, y);
+}
+function drawStar(x, y, r, color) {
+  ctx.fillStyle = color; ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const a = (i / 10) * Math.PI * 2 - Math.PI / 2, rr = i % 2 ? r * 0.45 : r;
+    ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr);
+  }
+  ctx.closePath(); ctx.fill();
+}
+
+// ===== Main loop =====
+function loop(t) {
+  const dt = Math.min(0.033, (t - (lastTime || t)) / 1000);
+  lastTime = t;
+  update(dt);
+  draw();
+  requestAnimationFrame(loop);
+}
+reset();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

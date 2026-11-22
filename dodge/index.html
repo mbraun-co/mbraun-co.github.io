@@ -514,13 +514,16 @@ let state = 'menu';
 let duck, things, foods, particles, blasts, popups, power;
 let score, best = 0, spawnTimer, foodTimer, speedUp, lastTime, walkTime = 0, shake = 0, playTime = 0;
 let level = 0, prevLevel = 0, bgMix = 1, banner = 0, flash = 0, lives = 0;
+// Castle checkpoint: die in the Castle and you restart there, up to 3 times.
+// On the 3rd Castle death you go back to the start of the City.
+let castleDeaths = 0, restartLevel = START_LEVEL;
 
-function reset() {
+function reset(startLevel = START_LEVEL) {
   duck = { x: W / 2, facing: 1, moving: false, invuln: 0 };
   things = []; foods = []; particles = []; blasts = []; popups = [];
   power = { shield: false };
   for (const n of TIMED) power[n] = 0;
-  level = prevLevel = START_LEVEL; bgMix = 1; banner = 0; flash = 0; lives = 0;
+  level = prevLevel = startLevel; bgMix = 1; banner = level > 0 ? 2.5 : 0; flash = 0; lives = 0;
   score = LEVELS[level].score;
   spawnTimer = 0; foodTimer = 3; speedUp = 1; shake = 0; playTime = 0;
 }
@@ -546,7 +549,7 @@ function toCanvasX(clientX) {
 canvas.addEventListener('pointerdown', e => { if (state !== 'playing') start(); pointerX = toCanvasX(e.clientX); });
 canvas.addEventListener('pointermove', e => { if (e.buttons || e.pointerType === 'touch') pointerX = toCanvasX(e.clientX); });
 canvas.addEventListener('pointerup', () => pointerX = null);
-function start() { reset(); state = 'playing'; }
+function start() { reset(restartLevel); state = 'playing'; }
 
 // ===== Spawning =====
 function pickHazard() {
@@ -619,6 +622,11 @@ function hurt() {
   }
   state = 'over';
   best = Math.max(best, Math.floor(score));
+  if (level === 2) {                        // died in the Castle
+    castleDeaths++;
+    if (castleDeaths >= 3) { restartLevel = 1; castleDeaths = 0; }  // out of tries: back to the City
+    else restartLevel = 2;                                           // retry the Castle
+  } else { restartLevel = 0; castleDeaths = 0; }                     // died in the Park or City: start over
   burst(duck.x, duckY(), ['#ffd93b', '#fff'], 25, 250, 4);
 }
 
@@ -853,8 +861,10 @@ function draw() {
     ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0, 0, W, H);
     centerText('QUACK! GAME OVER', GROUND / 2 - 30, 38, '#ff5d73');
     centerText('Score: ' + Math.floor(score), GROUND / 2 + 25, 26, '#fff');
-    if (level > 0) centerText('You made it to the ' + LEVELS[level].name + '!', GROUND / 2 + 55, 16, LEVELS[level].color);
-    centerText(TOUCH ? 'Tap to try again' : 'Click, tap, or press Space to try again', GROUND / 2 + 90, 16, '#ccd');
+    if (level === 2) centerText(restartLevel === 2 ? 'Castle tries left: ' + (3 - castleDeaths) : 'Out of Castle tries! Back to the City.', GROUND / 2 + 55, 16, '#ffb347');
+    else if (level > 0) centerText('You made it to the ' + LEVELS[level].name + '!', GROUND / 2 + 55, 16, LEVELS[level].color);
+    const again = restartLevel === 2 ? 'retry the Castle' : restartLevel === 1 ? 'restart at the City' : 'try again';
+    centerText((TOUCH ? 'Tap to ' : 'Click, tap, or press Space to ') + again, GROUND / 2 + 90, 16, '#ccd');
   }
 }
 
@@ -877,6 +887,7 @@ function drawHud() {
   ctx.font = '16px monospace'; ctx.fillStyle = '#ccd';
   ctx.fillText('Best: ' + best, 20, 68);
   for (let i = 0; i < lives; i++) ctx.drawImage(sprite('heart', 3), 20 + i * 26, 80);
+  if (level === 2 && state === 'playing') centerText('Castle try ' + (castleDeaths + 1) + ' of 3', 30, 14, '#ffb347');
 
   // Active power-ups, top right: icon + time bar
   let y = 24;

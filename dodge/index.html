@@ -44,7 +44,7 @@ const PALETTE = {
   t: '#ffcc00', e: '#9ff3ff', n: '#3a5fcd',                           // taxi, firework
   H: '#ffe066', b: '#4a2e14', m: '#a8a8b4', M: '#5a5a66',             // castle stuff
   h: '#c2552e', D: '#a0522d', j: '#c8783a', v: '#b45cff', V: '#e0b3ff',
-  N: '#ffcc4d', E: '#e0a020'
+  N: '#ffcc4d', E: '#e0a020', G: '#5c4d40'
 };
 const SPRITES = {
   duck1: [
@@ -363,42 +363,301 @@ const SPRITES = {
     "NENNNNEN",
     "NNNNENNN",
     "NNNNNNNN"
+  ],
+
+  // ---------- Level 4: Ocean ----------
+  anchor: [
+    "...ooo...",
+    "...o.o...",
+    "...ooo...",
+    "....o....",
+    ".ooooooo.",
+    "....o....",
+    "....o....",
+    "o...o...o",
+    "oo..o..oo",
+    ".oo.o.oo.",
+    "..ooooo.."
+  ],
+  treasureChest: [
+    ".QQQQQQQQ.",
+    "QCCCCCCCCQ",
+    "QHHHHHHHHQ",
+    "QCCCHHCCCQ",
+    "QCCCHHCCCQ",
+    "QCCCCCCCCQ",
+    "QHHHHHHHHQ",
+    "QQQQQQQQQQ"
+  ],
+  seaMine: [
+    "....o....",
+    ".o.xxx.o.",
+    "..xxxxx..",
+    ".xxxRxxx.",
+    "oxxRRRxxo",
+    ".xxxRxxx.",
+    "..xxxxx..",
+    ".o.xxx.o.",
+    "....o...."
+  ],
+  boat: [
+    "......w.......",
+    "......wR......",
+    "......wRR.....",
+    "......w.......",
+    "QQQQQQQQQQQQQQ",
+    ".CCCCCCCCCCCC.",
+    "..CCCCCCCCCC..",
+    "...QQQQQQQQ..."
+  ],
+  sushi: [
+    ".kkkkkk.",
+    "kwwwwwwk",
+    "kwwOOwwk",
+    "kwwOOwwk",
+    "kwwwwwwk",
+    ".kkkkkk."
+  ],
+  clam: [
+    "..pppp..",
+    ".pppppp.",
+    "pp.ww.pp",
+    "pp.ww.pp",
+    ".pppppp.",
+    "..pppp.."
+  ],
+  seaweed: [
+    ".g..g.",
+    "gg.gg.",
+    ".gg.gg",
+    "..gg.g",
+    ".gg.gg",
+    "gg.gg.",
+    ".g..g."
+  ],
+  shrimp: [
+    "....OOO.",
+    "..OOOOOO",
+    ".OOcOOO.",
+    "OOOOO...",
+    "O.OO....",
+    "OO......"
+  ],
+
+  // ---------- Level 5: Volcano ----------
+  lavaRock: [
+    "..GGGG..",
+    ".GOGGGG.",
+    "GGGGOGGG",
+    "GOGGGGOG",
+    "GGGOGGGG",
+    "GGGGGOGG",
+    ".GGOGGG.",
+    "..GGGG.."
+  ],
+  dinoBone: [
+    "ww......ww",
+    "wwwwwwwwww",
+    "wwwwwwwwww",
+    "ww......ww"
+  ],
+  lavaBomb: [
+    "....F....",
+    "....f....",
+    "..kkkkk..",
+    ".kkOkkkk.",
+    "kkkkkOkkk",
+    "kOkkkkkkk",
+    "kkkkOkkOk",
+    "kkOkkkkkk",
+    ".kkkkOkk.",
+    "..kkkkk.."
+  ],
+  boulder: [
+    "...mmmmmm...",
+    ".mmmmmmmmmm.",
+    "mmmMmmmmmmmm",
+    "mmmmmmmMmmmm",
+    "mmMmmmmmmmmm",
+    "mmmmmmmmmMmm",
+    "mmmmmMmmmmmm",
+    "mmmmmmmmmmmm",
+    ".mmmmmmmmmm.",
+    "...mmmmmm..."
+  ],
+  dragonFruit: [
+    "g..g..g",
+    ".ppppp.",
+    "pppgppp",
+    "ppppppp",
+    "pgppppp",
+    "pppppgp",
+    ".ppppp.",
+    "..ppp.."
+  ],
+  marshmallow: [
+    "cccc",
+    "cccc",
+    "cddc",
+    "cccc",
+    ".L..",
+    ".L..",
+    ".L.."
+  ],
+  coconut: [
+    "..QQQQ..",
+    ".QQQQQQ.",
+    "QQwwwwQQ",
+    "QwwwwwwQ",
+    "QwwwwwwQ",
+    "QQwwwwQQ",
+    ".QQQQQQ.",
+    "..QQQQ.."
+  ],
+  mango: [
+    "...g...",
+    "..gg...",
+    ".OOOOO.",
+    "OOOOOyO",
+    "OOOOyyO",
+    "OOOyyyO",
+    ".OOyyO.",
+    "..OOO.."
+  ],
+
+  // ---------- Level 6: Space ----------
+  meteor: [
+    "...mmm...",
+    ".mmmmmM..",
+    "mmMmmmmm.",
+    "mmmmmMmmm",
+    "mmmmmmmMm",
+    ".mMmmmmmm",
+    "..mmmMmm.",
+    "...mmmm.."
+  ],
+  satellite: [
+    "nnnn.....nnnn",
+    "kkkk..S..kkkk",
+    "nnnnSSSSSnnnn",
+    "kkkkSSRSSkkkk",
+    "nnnnSSSSSnnnn",
+    "kkkk..S..kkkk",
+    "nnnn.....nnnn"
+  ],
+  ufo: [
+    "....eeee....",
+    "...eIIIIe...",
+    "..SSSSSSSS..",
+    "SSSSSSSSSSSS",
+    "SHSSHSSHSSHS",
+    ".SSSSSSSSSS.",
+    "...S....S..."
+  ],
+  spaceMine: [
+    "....o....",
+    ".o.xxx.o.",
+    "..xxxxx..",
+    ".xxxvxxx.",
+    "oxxvvvxxo",
+    ".xxxvxxx.",
+    "..xxxxx..",
+    ".o.xxx.o.",
+    "....o...."
+  ],
+  moonPie: [
+    ".dddddd.",
+    "dddddddd",
+    "cccccccc",
+    "dddddddd",
+    "cccccccc",
+    "dddddddd",
+    ".dddddd."
+  ],
+  starFruit: [
+    "....t....",
+    "....t....",
+    "...ttt...",
+    "ttttuttt.",
+    ".ttuuutt.",
+    "..ttttt..",
+    ".ttt.ttt.",
+    ".tt...tt.",
+    "t.......t"
+  ],
+  spaceIceCream: [
+    ".SSSSS.",
+    "SSSSSSS",
+    "ppppppp",
+    "ppppppp",
+    "ccccccc",
+    "ccccccc",
+    "bbbbbbb",
+    "bbbbbbb",
+    ".SSSSS."
+  ],
+  cosmicCookie: [
+    "..vvvv..",
+    ".vvwvvv.",
+    "vvvvvwvv",
+    "vwvvvvvv",
+    "vvvvwvvv",
+    "vvwvvvvv",
+    ".vvvvwv.",
+    "..vvvv.."
   ]
 };
 
-// Food power-ups: what each one does
+// Food power-ups. "effect" is what eating it does.
+// Timed effects last "dur" seconds; shield / life / nova happen instantly.
 const FOODS = {
   // Park
-  chili:       { label: 'SPEED!',          desc: 'Hot pepper: super speed',   dur: 6, color: '#ff6b4a' },
-  mushroom:    { label: 'TINY!',           desc: 'Mushroom: tiny duck',       dur: 6, color: '#ff8fc7' },
-  donut:       { label: 'SHIELD!',         desc: 'Donut: blocks one hit',     dur: 0, color: '#4ee1c1' },
-  popsicle:    { label: 'SLOW-MO!',        desc: 'Popsicle: slows time',      dur: 5, color: '#7fd8ff' },
-  corn:        { label: '2X POINTS!',      desc: 'Golden corn: 2x points',    dur: 8, color: '#ffd93b' },
+  chili:         { effect: 'speed',  label: 'SPEED!',          desc: 'Hot pepper: super speed',  dur: 6, color: '#ff6b4a' },
+  mushroom:      { effect: 'tiny',   label: 'TINY!',           desc: 'Mushroom: tiny duck',      dur: 6, color: '#ff8fc7' },
+  donut:         { effect: 'shield', label: 'SHIELD!',         desc: 'Donut: blocks one hit',    dur: 0, color: '#4ee1c1' },
+  popsicle:      { effect: 'slow',   label: 'SLOW-MO!',        desc: 'Popsicle: slows time',     dur: 5, color: '#7fd8ff' },
+  corn:          { effect: 'x2',     label: '2X POINTS!',      desc: 'Golden corn: 2x points',   dur: 8, color: '#ffd93b' },
   // City
-  pizza:       { label: 'GHOST!',          desc: 'Pizza: ghost duck',         dur: 5, color: '#ffb347' },
-  hotDog:      { label: 'LASER BEAK!',     desc: 'Hot dog: laser beak',       dur: 5, color: '#c6ff5a' },
-  pretzel:     { label: 'FREEZE!',         desc: 'Pretzel: freeze time',      dur: 3, color: '#9ff3ff' },
-  coffee:      { label: 'CAFFEINE BLAST!', desc: 'Coffee: clears the sky',    dur: 0, color: '#b98cff' },
+  pizza:         { effect: 'ghost',  label: 'GHOST!',          desc: 'Pizza: ghost duck',        dur: 5, color: '#ffb347' },
+  hotDog:        { effect: 'laser',  label: 'LASER BEAK!',     desc: 'Hot dog: laser beak',      dur: 5, color: '#c6ff5a' },
+  pretzel:       { effect: 'freeze', label: 'FREEZE!',         desc: 'Pretzel: freeze time',     dur: 3, color: '#9ff3ff' },
+  coffee:        { effect: 'nova',   label: 'CAFFEINE BLAST!', desc: 'Coffee: clears the sky',   dur: 0, color: '#b98cff' },
   // Castle
-  turkeyLeg:   { label: 'MEGA DUCK!',      desc: 'Turkey leg: mega duck',     dur: 5, color: '#ff9f43' },
-  goldenApple: { label: '+1 LIFE!',        desc: 'Golden apple: extra life',  dur: 0, color: '#ffe066' },
-  potion:      { label: 'SHRINK JUNK!',    desc: 'Potion: shrinks the junk',  dur: 6, color: '#c77dff' },
-  cheese:      { label: '3X POINTS!',      desc: 'Cheese: 3x points',         dur: 6, color: '#ffcc4d' }
+  turkeyLeg:     { effect: 'mega',   label: 'MEGA DUCK!',      desc: 'Turkey leg: mega duck',    dur: 5, color: '#ff9f43' },
+  goldenApple:   { effect: 'life',   label: '+1 LIFE!',        desc: 'Golden apple: extra life', dur: 0, color: '#ffe066' },
+  potion:        { effect: 'shrink', label: 'SHRINK JUNK!',    desc: 'Potion: shrinks the junk', dur: 6, color: '#c77dff' },
+  cheese:        { effect: 'x3',     label: '3X POINTS!',      desc: 'Cheese: 3x points',        dur: 6, color: '#ffcc4d' },
+  // Ocean
+  sushi:         { effect: 'magnet', label: 'SNACK MAGNET!',   desc: 'Sushi: pulls food to you', dur: 8, color: '#ff8c6b' },
+  clam:          { effect: 'shield', label: 'PEARL SHIELD!',   desc: 'Clam: blocks one hit',     dur: 0, color: '#4ee1c1' },
+  seaweed:       { effect: 'tiny',   label: 'TINY!',           desc: 'Seaweed: tiny duck',       dur: 6, color: '#4caf50' },
+  shrimp:        { effect: 'x2',     label: '2X POINTS!',      desc: 'Shrimp: 2x points',        dur: 8, color: '#ff8c1a' },
+  // Volcano
+  dragonFruit:   { effect: 'laser',  label: 'LASER BEAK!',     desc: 'Dragon fruit: laser beak', dur: 5, color: '#ff5fa2' },
+  marshmallow:   { effect: 'freeze', label: 'FREEZE!',         desc: 'Marshmallow: freeze time', dur: 3, color: '#f5e6c8' },
+  coconut:       { effect: 'mega',   label: 'MEGA DUCK!',      desc: 'Coconut: mega duck',       dur: 5, color: '#c99a5b' },
+  mango:         { effect: 'x3',     label: '3X POINTS!',      desc: 'Mango: 3x points',         dur: 6, color: '#ffb347' },
+  // Space
+  moonPie:       { effect: 'ghost',  label: 'GHOST!',          desc: 'Moon pie: ghost duck',     dur: 5, color: '#d9a066' },
+  starFruit:     { effect: 'nova',   label: 'NOVA BLAST!',     desc: 'Star fruit: clears sky',   dur: 0, color: '#ffe066' },
+  spaceIceCream: { effect: 'slow',   label: 'SLOW-MO!',        desc: 'Space ice cream: slow-mo', dur: 5, color: '#9ff3ff' },
+  cosmicCookie:  { effect: 'life',   label: '+1 LIFE!',        desc: 'Cosmic cookie: extra life',dur: 0, color: '#b98cff' }
 };
-const TIMED = Object.keys(FOODS).filter(n => FOODS[n].dur > 0);
+const TIMED = ['speed', 'tiny', 'slow', 'x2', 'ghost', 'laser', 'freeze', 'mega', 'shrink', 'x3', 'magnet'];
 
-// The three levels: when they start, what falls, and what food shows up.
-// Hazard weight = how common it is. px = pixel size range (bigger = bigger object).
+// The levels: when they start, what falls, and what food shows up.
+// weight = how common. px = pixel size range. speed = fall speed multiplier.
+// fall = level-wide fall speed (the ocean sinks slowly), sway = side-to-side drift.
 const LEVELS = [
-  { name: 'Park', score: 0,
+  { name: 'Park', the: 'the Park', score: 0, color: '#4caf50', base: 1.0, interval: 0.75,
     hazards: [
       { name: 'bowlingBall', weight: 4, px: [4, 5] },
       { name: 'crate',       weight: 4, px: [4, 5] },
-      { name: 'tnt',         weight: 2, px: [3, 4] },
+      { name: 'tnt',         weight: 1.5, px: [3, 4] },   // a bit rarer than before
       { name: 'piano',       weight: 1, px: [5, 6], speed: 1.3 }
     ],
     foods: ['chili', 'mushroom', 'donut', 'popsicle', 'corn'] },
-  { name: 'City', score: 500, banner: ['LEVEL 2', 'THE CITY'], color: '#ffd86b',
+  { name: 'City', the: 'the City', score: 500, color: '#ffd86b', base: 1.4, interval: 0.6,
     hazards: [
       { name: 'flowerpot', weight: 4, px: [4, 5] },
       { name: 'acUnit',    weight: 4, px: [4, 5] },
@@ -406,7 +665,7 @@ const LEVELS = [
       { name: 'taxi',      weight: 1, px: [5, 6], speed: 1.3 }
     ],
     foods: ['pizza', 'hotDog', 'pretzel', 'coffee'] },
-  { name: 'Castle', score: 1000, banner: ['LEVEL 3', 'THE CASTLE'], color: '#ffb347',
+  { name: 'Castle', the: 'the Castle', score: 1000, color: '#ffb347', base: 1.6, interval: 0.55,
     hazards: [
       { name: 'cannonball', weight: 4, px: [4, 5], speed: 1.15 },
       { name: 'barrel',     weight: 3, px: [4, 5] },
@@ -414,11 +673,36 @@ const LEVELS = [
       { name: 'powderKeg',  weight: 2, px: [4, 4] },
       { name: 'stoneBlock', weight: 1, px: [5, 6], speed: 1.3 }
     ],
-    foods: ['turkeyLeg', 'goldenApple', 'potion', 'cheese'] }
+    foods: ['turkeyLeg', 'goldenApple', 'potion', 'cheese'] },
+  { name: 'Ocean', the: 'the Ocean', score: 1500, color: '#4ee1c1', base: 1.7, interval: 0.5, fall: 0.8, sway: 30,
+    hazards: [
+      { name: 'anchor',        weight: 4, px: [4, 5], speed: 1.2 },
+      { name: 'treasureChest', weight: 4, px: [4, 5] },
+      { name: 'seaMine',       weight: 2, px: [4, 4] },
+      { name: 'boat',          weight: 1, px: [5, 6], speed: 1.2 }
+    ],
+    foods: ['sushi', 'clam', 'seaweed', 'shrimp'] },
+  { name: 'Volcano', the: 'the Volcano', score: 2000, color: '#ff6a1a', base: 1.8, interval: 0.5,
+    hazards: [
+      { name: 'lavaRock', weight: 5, px: [4, 6], trail: true },
+      { name: 'dinoBone', weight: 3, px: [4, 5] },
+      { name: 'lavaBomb', weight: 2, px: [4, 4] },
+      { name: 'boulder',  weight: 1, px: [5, 6], speed: 1.3 }
+    ],
+    foods: ['dragonFruit', 'marshmallow', 'coconut', 'mango'] },
+  { name: 'Space', the: 'Space', score: 2500, color: '#b98cff', base: 1.9, interval: 0.48,
+    hazards: [
+      { name: 'meteor',    weight: 4, px: [4, 6], trail: true },
+      { name: 'satellite', weight: 3, px: [3, 4] },
+      { name: 'ufo',       weight: 2, px: [4, 4], speed: 0.75, zigzag: 80 },
+      { name: 'spaceMine', weight: 2, px: [4, 4] }
+    ],
+    foods: ['moonPie', 'starFruit', 'spaceIceCream', 'cosmicCookie'] }
 ];
-const EXPLOSIVE = new Set(['tnt', 'firework', 'powderKeg']);   // these blow up shortly after landing
-// Testing shortcut: add ?level=2 or ?level=3 to the URL to start there
-const START_LEVEL = Math.min(3, Math.max(1, parseInt(new URLSearchParams(location.search).get('level')) || 1)) - 1;
+const EXPLOSIVE = new Set(['tnt', 'firework', 'powderKeg', 'seaMine', 'lavaBomb', 'spaceMine']);  // blow up after landing
+const CHECKPOINT_FROM = 2;   // from the Castle on, you get 3 tries per level before going back one level
+// Testing shortcut: add ?level=2 ... ?level=6 to the URL to start there
+const START_LEVEL = Math.min(LEVELS.length, Math.max(1, parseInt(new URLSearchParams(location.search).get('level')) || 1)) - 1;
 
 // Pre-render each sprite once at a given pixel size, so drawing is fast.
 const cache = {};
@@ -438,101 +722,163 @@ function sprite(name, px) {
 }
 
 // ===== Backgrounds =====
-// City skyline: random buildings with lit windows (made once)
+const rnd = (a, b) => a + Math.random() * (b - a);
 const BUILDINGS = [];
 for (let x = -10; x < W + 10;) {
-  const w = 40 + Math.floor(Math.random() * 4) * 12, h = 120 + Math.random() * 230;
+  const w = 40 + Math.floor(Math.random() * 4) * 12, h = rnd(120, 350);
   const lit = [];
   for (let wy = 14; wy < h - 10; wy += 18) for (let wx = 8; wx < w - 8; wx += 12) if (Math.random() < 0.35) lit.push([wx, wy]);
   BUILDINGS.push({ x, w, h, lit, shade: BUILDINGS.length % 2 });
   x += w + 2;
 }
+const BUBBLES = Array.from({ length: 28 }, () => ({ x: rnd(0, W), sp: rnd(20, 60), r: rnd(2, 6), off: rnd(0, 1000) }));
+const KELP = Array.from({ length: 9 }, (_, i) => ({ x: 20 + i * 55 + rnd(-10, 10), h: rnd(60, 150), ph: rnd(0, 6) }));
+const EMBERS = Array.from({ length: 40 }, () => ({ x: rnd(0, W), sp: rnd(30, 90), s: rnd(2, 4), off: rnd(0, 1000) }));
+const STARS = Array.from({ length: 90 }, () => ({ x: rnd(0, W), y: rnd(0, GROUND), s: Math.random() < 0.2 ? 3 : 2, tw: rnd(0, 6) }));
+const CRATERS = Array.from({ length: 7 }, (_, i) => ({ x: 30 + i * 70 + rnd(0, 30), y: GROUND + rnd(14, Math.max(16, H - GROUND - 10)), r: rnd(6, 16) }));
+const now = () => performance.now() / 1000;
+let drawAlpha = 1;   // current background opacity (used while fading between levels)
+
+function skyGradient(stops) {
+  const g = ctx.createLinearGradient(0, 0, 0, GROUND);
+  stops.forEach((c, i) => g.addColorStop(i / (stops.length - 1), c));
+  ctx.fillStyle = g; ctx.fillRect(-20, -20, W + 40, GROUND + 20);
+}
+function groundBand(fill, top) {
+  ctx.fillStyle = fill; ctx.fillRect(-20, GROUND, W + 40, H - GROUND + 20);
+  ctx.fillStyle = top; ctx.fillRect(-20, GROUND, W + 40, 6);
+}
 
 function drawPark() {
-  const g = ctx.createLinearGradient(0, 0, 0, GROUND);
-  g.addColorStop(0, '#1b1d3a'); g.addColorStop(1, '#2a1f4a');
-  ctx.fillStyle = g; ctx.fillRect(-20, -20, W + 40, GROUND + 20);
-  ctx.fillStyle = '#2f6b3a'; ctx.fillRect(-20, GROUND, W + 40, H - GROUND + 20);
-  ctx.fillStyle = '#3f8a4c'; ctx.fillRect(-20, GROUND, W + 40, 6);
+  skyGradient(['#1b1d3a', '#2a1f4a']);
+  groundBand('#2f6b3a', '#3f8a4c');
   if (TOUCH) for (let x = 12; x < W; x += 37) ctx.fillRect(x, GROUND + 22 + (x * 7 % 70), 4, 8);
 }
 
 function drawCity() {
-  const g = ctx.createLinearGradient(0, 0, 0, GROUND);
-  g.addColorStop(0, '#0d0b24'); g.addColorStop(1, '#4a2a5e');
-  ctx.fillStyle = g; ctx.fillRect(-20, -20, W + 40, GROUND + 20);
-  ctx.fillStyle = '#f4f1d0'; ctx.beginPath(); ctx.arc(90, 110, 26, 0, Math.PI * 2); ctx.fill();   // moon
+  skyGradient(['#0d0b24', '#4a2a5e']);
+  ctx.fillStyle = '#f4f1d0'; ctx.beginPath(); ctx.arc(90, 110, 26, 0, Math.PI * 2); ctx.fill();
   for (const b of BUILDINGS) {
     const top = GROUND - b.h;
-    ctx.fillStyle = b.shade ? '#1c1f3d' : '#24284d';
-    ctx.fillRect(b.x, top, b.w, b.h);
+    ctx.fillStyle = b.shade ? '#1c1f3d' : '#24284d'; ctx.fillRect(b.x, top, b.w, b.h);
     ctx.fillStyle = '#ffd86b';
     for (const [wx, wy] of b.lit) ctx.fillRect(b.x + wx, top + wy, 5, 7);
   }
-  // Sidewalk and street
-  ctx.fillStyle = '#3d4049'; ctx.fillRect(-20, GROUND, W + 40, H - GROUND + 20);
-  ctx.fillStyle = '#8a8fa3'; ctx.fillRect(-20, GROUND, W + 40, 6);
+  groundBand('#3d4049', '#8a8fa3');
   ctx.fillStyle = '#e8c547';
   const lineY = GROUND + Math.min(26, (H - GROUND) / 2);
   for (let x = 10; x < W; x += 50) ctx.fillRect(x, lineY, 26, 4);
 }
 
 function drawCastle() {
-  const g = ctx.createLinearGradient(0, 0, 0, GROUND);
-  g.addColorStop(0, '#2a1640'); g.addColorStop(0.7, '#a8483a'); g.addColorStop(1, '#e07a3a');
-  ctx.fillStyle = g; ctx.fillRect(-20, -20, W + 40, GROUND + 20);
-  ctx.fillStyle = '#ffcf6b'; ctx.beginPath(); ctx.arc(W / 2, GROUND - 230, 40, 0, Math.PI * 2); ctx.fill();  // setting sun
+  skyGradient(['#2a1640', '#a8483a', '#e07a3a']);
+  ctx.fillStyle = '#ffcf6b'; ctx.beginPath(); ctx.arc(W / 2, GROUND - 230, 40, 0, Math.PI * 2); ctx.fill();
   const wallTop = GROUND - 160, towerTop = GROUND - 290;
-  // Towers (left and right)
   for (const tx of [16, W - 96]) {
     ctx.fillStyle = '#57506a'; ctx.fillRect(tx, towerTop, 80, GROUND - towerTop);
     for (let i = 0; i < 4; i++) ctx.fillRect(tx + i * 22, towerTop - 14, 14, 14);
-    ctx.fillStyle = '#2a2433'; ctx.fillRect(tx + 32, towerTop + 40, 16, 26);   // window
-    ctx.fillStyle = '#4a3f58'; ctx.fillRect(tx + 38, towerTop - 60, 4, 46);    // flag pole
+    ctx.fillStyle = '#2a2433'; ctx.fillRect(tx + 32, towerTop + 40, 16, 26);
+    ctx.fillStyle = '#4a3f58'; ctx.fillRect(tx + 38, towerTop - 60, 4, 46);
     ctx.fillStyle = '#d63a4a';
     ctx.beginPath(); ctx.moveTo(tx + 42, towerTop - 60); ctx.lineTo(tx + 70, towerTop - 50); ctx.lineTo(tx + 42, towerTop - 40); ctx.fill();
   }
-  // Wall with battlements
   ctx.fillStyle = '#625a70'; ctx.fillRect(96, wallTop, W - 192, GROUND - wallTop);
   for (let x = 100; x < W - 110; x += 30) ctx.fillRect(x, wallTop - 14, 16, 14);
   ctx.fillStyle = 'rgba(0,0,0,0.12)';
   for (let y = wallTop + 20; y < GROUND; y += 22) ctx.fillRect(96, y, W - 192, 2);
-  // Gate
   ctx.fillStyle = '#2a2433';
   ctx.fillRect(W / 2 - 36, GROUND - 80, 72, 80);
   ctx.beginPath(); ctx.arc(W / 2, GROUND - 80, 36, Math.PI, 0); ctx.fill();
-  // Dirt courtyard
-  ctx.fillStyle = '#6b5440'; ctx.fillRect(-20, GROUND, W + 40, H - GROUND + 20);
-  ctx.fillStyle = '#8a6d4f'; ctx.fillRect(-20, GROUND, W + 40, 6);
+  groundBand('#6b5440', '#8a6d4f');
   ctx.fillStyle = '#5a4535';
   for (let x = 14; x < W; x += 46) ctx.fillRect(x, GROUND + 14 + (x * 13 % Math.max(10, H - GROUND - 26)), 12, 6);
 }
-const BACKGROUNDS = [drawPark, drawCity, drawCastle];
+
+function drawOcean() {
+  skyGradient(['#0b4f7a', '#083a5c', '#052640']);
+  // Light rays from the surface
+  ctx.fillStyle = 'rgba(180,240,255,0.06)';
+  for (let i = 0; i < 5; i++) {
+    const x = 40 + i * 100 + Math.sin(now() * 0.5 + i) * 10;
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + 40, 0); ctx.lineTo(x + 110, GROUND); ctx.lineTo(x + 50, GROUND); ctx.fill();
+  }
+  // Swaying kelp
+  ctx.fillStyle = '#1f7a4a';
+  for (const k of KELP)
+    for (let y = 0; y < k.h; y += 8) ctx.fillRect(k.x + Math.sin(now() * 1.5 + k.ph + y / 25) * 6, GROUND - y - 8, 6, 8);
+  // Rising bubbles
+  ctx.strokeStyle = 'rgba(200,245,255,0.5)'; ctx.lineWidth = 1.5;
+  for (const b of BUBBLES) {
+    const y = GROUND - ((now() * b.sp + b.off) % GROUND);
+    ctx.beginPath(); ctx.arc(b.x + Math.sin(y / 30) * 4, y, b.r, 0, Math.PI * 2); ctx.stroke();
+  }
+  groundBand('#c2a66b', '#d8bf86');
+  ctx.fillStyle = '#ff8fc7';
+  for (let x = 30; x < W; x += 90) ctx.fillRect(x, GROUND + 12 + (x * 7 % Math.max(8, H - GROUND - 22)), 6, 4);
+}
+
+function drawVolcano() {
+  skyGradient(['#120606', '#3a0f0a', '#6a1e10']);
+  // The volcano with a glowing crater
+  ctx.fillStyle = '#2a1a18';
+  ctx.beginPath(); ctx.moveTo(40, GROUND); ctx.lineTo(W / 2 - 50, GROUND - 330); ctx.lineTo(W / 2 + 50, GROUND - 330); ctx.lineTo(W - 40, GROUND); ctx.fill();
+  const glow = 0.6 + Math.sin(now() * 3) * 0.2;
+  ctx.fillStyle = `rgba(255,106,26,${glow})`; ctx.fillRect(W / 2 - 50, GROUND - 334, 100, 10);
+  ctx.fillStyle = `rgba(255,140,40,${glow * 0.8})`;
+  ctx.fillRect(W / 2 - 20, GROUND - 324, 8, 120); ctx.fillRect(W / 2 + 14, GROUND - 324, 6, 80);
+  // Rising embers
+  for (const e of EMBERS) {
+    const y = GROUND - ((now() * e.sp + e.off) % GROUND);
+    ctx.fillStyle = y < GROUND / 2 ? 'rgba(255,140,40,0.5)' : 'rgba(255,200,80,0.8)';
+    ctx.fillRect(e.x + Math.sin(y / 40) * 8, y, e.s, e.s);
+  }
+  groundBand('#2e2422', '#4a3a36');
+  ctx.fillStyle = `rgba(255,106,26,${glow})`;
+  for (let x = 20; x < W; x += 70) ctx.fillRect(x, GROUND + 10 + (x * 11 % Math.max(8, H - GROUND - 20)), 30, 3);
+}
+
+function drawSpace() {
+  skyGradient(['#02030a', '#120a2a']);
+  ctx.fillStyle = '#fff';
+  for (const s of STARS) {
+    ctx.globalAlpha = drawAlpha * (0.5 + 0.5 * Math.sin(now() * 2 + s.tw));
+    ctx.fillRect(s.x, s.y, s.s, s.s);
+  }
+  ctx.globalAlpha = drawAlpha;
+  ctx.fillStyle = '#7b5cd6'; ctx.beginPath(); ctx.arc(W - 90, 150, 38, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#9b7cf0'; ctx.beginPath(); ctx.arc(W - 100, 140, 26, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#e0b3ff'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.ellipse(W - 90, 150, 62, 14, -0.3, 0, Math.PI * 2); ctx.stroke();
+  groundBand('#5d6170', '#8a8fa3');
+  ctx.fillStyle = '#4a4e5c';
+  for (const c of CRATERS) { ctx.beginPath(); ctx.ellipse(c.x, Math.min(c.y, H - 8), c.r, c.r * 0.4, 0, 0, Math.PI * 2); ctx.fill(); }
+}
+const BACKGROUNDS = [drawPark, drawCity, drawCastle, drawOcean, drawVolcano, drawSpace];
 
 // ===== Game state =====
 let state = 'menu';
-let duck, things, foods, particles, blasts, popups, power;
+let duck, things, foods, particles, blasts, popups, power, powerIcon;
 let score, best = 0, spawnTimer, foodTimer, speedUp, lastTime, walkTime = 0, shake = 0, playTime = 0;
 let level = 0, prevLevel = 0, bgMix = 1, banner = 0, flash = 0, lives = 0;
-// Castle checkpoint: die in the Castle and you restart there, up to 3 times.
-// On the 3rd Castle death you go back to the start of the City.
-let castleDeaths = 0, restartLevel = START_LEVEL;
+// Checkpoints: from the Castle on, die in a level and you restart there, up to 3 times.
+// On the 3rd death in that level you go back to the start of the level before it.
+let levelDeaths = 0, deathLevel = -1, restartLevel = START_LEVEL;
 
 function reset(startLevel = START_LEVEL) {
   duck = { x: W / 2, facing: 1, moving: false, invuln: 0 };
   things = []; foods = []; particles = []; blasts = []; popups = [];
-  power = { shield: false };
-  for (const n of TIMED) power[n] = 0;
+  power = { shield: false }; powerIcon = {};
+  for (const e of TIMED) power[e] = 0;
   level = prevLevel = startLevel; bgMix = 1; banner = level > 0 ? 2.5 : 0; flash = 0; lives = 0;
   score = LEVELS[level].score;
   spawnTimer = 0; foodTimer = 3; speedUp = 1; shake = 0; playTime = 0;
 }
 
 // Duck size depends on power-ups (mega duck / tiny duck)
-const duckPx = () => power.turkeyLeg > 0 ? 6 : power.mushroom > 0 ? 2 : 4;
-const duckR  = () => power.turkeyLeg > 0 ? 30 : power.mushroom > 0 ? 10 : 20;
+const duckPx = () => power.mega > 0 ? 6 : power.tiny > 0 ? 2 : 4;
+const duckR  = () => power.mega > 0 ? 30 : power.tiny > 0 ? 10 : 20;
 const duckY  = () => GROUND - sprite('duck1', duckPx()).height / 2;
-const junk   = () => power.potion > 0 ? 0.5 : 1;    // shrink-junk potion
+const junk   = () => power.shrink > 0 ? 0.5 : 1;
 
 // ===== Input =====
 const keys = {};
@@ -560,21 +906,21 @@ function pickHazard() {
   return list[0];
 }
 function spawnThing() {
-  const h = pickHazard();
+  const h = pickHazard(), L = LEVELS[level];
   const px = h.px[0] + Math.floor(Math.random() * (h.px[1] - h.px[0] + 1));
   const img = sprite(h.name, px);
+  const x = img.width / 2 + Math.random() * (W - img.width);
   things.push({
-    type: h.name, img, w: img.width, h: img.height,
-    x: img.width / 2 + Math.random() * (W - img.width), y: -img.height,
-    vy: (160 + Math.random() * 140) * speedUp * (h.speed || 1),
-    wob: Math.random() * 6, ws: 3 + Math.random() * 3, landed: false, fuse: 0
+    type: h.name, img, w: img.width, h: img.height, x, x0: x, y: -img.height,
+    vy: rnd(160, 300) * speedUp * (h.speed || 1) * (L.fall || 1),
+    wob: rnd(0, 6), ws: rnd(3, 6), phase: rnd(0, 6),
+    zig: h.zigzag || L.sway || 0, trail: h.trail, landed: false, fuse: 0
   });
 }
 function spawnFood() {
   const list = LEVELS[level].foods;
   const name = list[Math.floor(Math.random() * list.length)];
-  const img = sprite(name, 4);
-  foods.push({ name, img, x: 30 + Math.random() * (W - 60), y: -30, r: 16, vy: 150, bob: Math.random() * 6 });
+  foods.push({ name, img: sprite(name, 4), x: rnd(30, W - 30), y: -30, r: 16, vy: 150, bob: rnd(0, 6) });
 }
 
 // ===== Effects =====
@@ -582,7 +928,7 @@ function burst(x, y, colors, count, speed, size) {
   for (let i = 0; i < count; i++) {
     const a = Math.random() * Math.PI * 2, v = speed * (0.3 + Math.random());
     particles.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - speed * 0.3,
-      life: 0.5 + Math.random() * 0.5, color: colors[i % colors.length], size });
+      life: 0.5 + Math.random() * 0.5, color: colors[i % colors.length], size, g: 600 });
   }
 }
 function popup(text, x, y, color) { popups.push({ text, x: Math.max(100, Math.min(W - 100, x)), y, color, life: 1.2 }); }
@@ -591,23 +937,30 @@ const DUST = {
   bowlingBall: ['#8a8fa3', '#3b6bdc'], crate: ['#c99a5b', '#7a5230'], piano: ['#5a3825', '#f2f2f2', '#11152e'],
   flowerpot: ['#c8643b', '#4caf50', '#6b4226'], acUnit: ['#c0c6d0', '#4a4f5e'], taxi: ['#ffcc00', '#9ff3ff', '#11152e'],
   cannonball: ['#11152e', '#8a8fa3'], barrel: ['#c99a5b', '#7a5230', '#4a4f5e'], sword: ['#c0c6d0', '#ffe066'],
-  stoneBlock: ['#a8a8b4', '#5a5a66']
+  stoneBlock: ['#a8a8b4', '#5a5a66'], anchor: ['#8a8fa3', '#d8bf86'], treasureChest: ['#ffe066', '#c99a5b', '#7a5230'],
+  boat: ['#c99a5b', '#7a5230', '#f2f2f2'], lavaRock: ['#5c4d40', '#ff8c1a', '#ffcf3b'], dinoBone: ['#f2f2f2', '#c9c2b0'],
+  boulder: ['#a8a8b4', '#5a5a66'], meteor: ['#a8a8b4', '#ff8c1a'], satellite: ['#c0c6d0', '#3a5fcd'],
+  ufo: ['#c0c6d0', '#9ff3ff', '#ffe066']
 };
+const BLAST_COLORS = {
+  firework: ['#ff5d73', '#4ee1c1', '#ffd93b', '#b98cff', '#7fd8ff', '#fff'],
+  seaMine: ['#9ff3ff', '#ffffff', '#4ee1c1', '#ffcf3b'],
+  spaceMine: ['#b98cff', '#e0b3ff', '#ffffff', '#7fd8ff'],
+  lavaBomb: ['#ff6a1a', '#ffcf3b', '#e63946', '#2e2422']
+};
+const BLAST_TINT = { firework: '185,140,255', seaMine: '160,240,255', spaceMine: '185,140,255' };
 function smash(t, count) { burst(t.x, t.y, DUST[t.type] || ['#ffcf3b', '#fff'], count, 200, 4); }
 
 function explode(t) {
   const radius = (70 + t.w * 0.6) * junk();
-  blasts.push({ x: t.x, y: t.y, r: radius, life: 0.4, firework: t.type === 'firework' });
-  const colors = t.type === 'firework'
-    ? ['#ff5d73', '#4ee1c1', '#ffd93b', '#b98cff', '#7fd8ff', '#fff']
-    : ['#ffcf3b', '#ff8c1a', '#e63946', '#fff'];
-  burst(t.x, t.y, colors, 45, 320, 6);
+  blasts.push({ x: t.x, y: t.y, r: radius, life: 0.4, tint: BLAST_TINT[t.type] });
+  burst(t.x, t.y, BLAST_COLORS[t.type] || ['#ffcf3b', '#ff8c1a', '#e63946', '#fff'], 45, 320, 6);
   shake = 0.35;
   if (Math.hypot(t.x - duck.x, t.y - duckY()) < radius + duckR() * 0.5) hurt();
 }
 
 function hurt() {
-  if (duck.invuln > 0 || power.pizza > 0 || power.turkeyLeg > 0) return;  // ghost or mega duck can't be hurt
+  if (duck.invuln > 0 || power.ghost > 0 || power.mega > 0) return;   // ghost or mega duck can't be hurt
   if (power.shield) {
     power.shield = false; duck.invuln = 1.2;
     popup('SHIELD SAVED YOU!', duck.x, duckY() - 50, '#4ee1c1');
@@ -622,26 +975,28 @@ function hurt() {
   }
   state = 'over';
   best = Math.max(best, Math.floor(score));
-  if (level === 2) {                        // died in the Castle
-    castleDeaths++;
-    if (castleDeaths >= 3) { restartLevel = 1; castleDeaths = 0; }  // out of tries: back to the City
-    else restartLevel = 2;                                           // retry the Castle
-  } else { restartLevel = 0; castleDeaths = 0; }                     // died in the Park or City: start over
   burst(duck.x, duckY(), ['#ffd93b', '#fff'], 25, 250, 4);
+  // Where do we restart?
+  if (level >= CHECKPOINT_FROM) {
+    if (deathLevel !== level) { deathLevel = level; levelDeaths = 0; }
+    levelDeaths++;
+    if (levelDeaths >= 3) { restartLevel = level - 1; levelDeaths = 0; deathLevel = -1; }  // out of tries: back one level
+    else restartLevel = level;                                                            // retry this level
+  } else { restartLevel = 0; levelDeaths = 0; deathLevel = -1; }                          // Park or City: start over
 }
 
 function eat(f) {
-  const info = FOODS[f.name];
+  const info = FOODS[f.name], e = info.effect;
   score += 25;
   popup(info.label, f.x, f.y - 20, info.color);
   burst(f.x, f.y, [info.color, '#fff'], 14, 160, 4);
-  if (f.name === 'donut') power.shield = true;
-  else if (f.name === 'goldenApple') lives = Math.min(3, lives + 1);
-  else if (f.name === 'coffee') {                // clears everything on screen
+  if (e === 'shield') power.shield = true;
+  else if (e === 'life') lives = Math.min(3, lives + 1);
+  else if (e === 'nova') {                       // clears everything on screen
     for (const t of things) { smash(t, 10); score += 10; }
     things = []; flash = 0.35; shake = 0.3;
   }
-  else power[f.name] = info.dur;
+  else { power[e] = info.dur; powerIcon[e] = f.name; }
 }
 
 // Circle (duck) vs. rectangle (falling object) collision
@@ -656,7 +1011,7 @@ function hitsDuck(t) {
 // ===== Update =====
 function update(dt) {
   // Effects keep animating even after game over
-  for (const p of particles) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 600 * dt; p.life -= dt; }
+  for (const p of particles) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += p.g * dt; p.life -= dt; }
   particles = particles.filter(p => p.life > 0);
   for (const b of blasts) b.life -= dt;
   blasts = blasts.filter(b => b.life > 0);
@@ -679,9 +1034,9 @@ function update(dt) {
   }
 
   // Power-up timers
-  for (const k of TIMED) power[k] = Math.max(0, power[k] - dt);
+  for (const e of TIMED) power[e] = Math.max(0, power[e] - dt);
   duck.invuln = Math.max(0, duck.invuln - dt);
-  const worldDt = power.pretzel > 0 ? 0 : power.popsicle > 0 ? dt * 0.45 : dt;  // freeze / slow-mo
+  const worldDt = power.freeze > 0 ? 0 : power.slow > 0 ? dt * 0.45 : dt;
 
   // Move duck
   let dx = 0;
@@ -691,27 +1046,27 @@ function update(dt) {
     const diff = pointerX - duck.x;
     dx = Math.abs(diff) < 4 ? 0 : Math.sign(diff) * Math.min(1, Math.abs(diff) / 40);
   }
-  const speed = power.chili > 0 ? 650 : 380;
+  const speed = power.speed > 0 ? 650 : 380;
   duck.x += dx * speed * dt;
   duck.x = Math.max(duckR() + 4, Math.min(W - duckR() - 4, duck.x));
   duck.moving = dx !== 0;
   if (dx) duck.facing = Math.sign(dx);
-  if (duck.moving) walkTime += dt * (power.chili > 0 ? 1.8 : 1);
-  if (power.chili > 0 && duck.moving && Math.random() < 0.6)
-    particles.push({ x: duck.x - duck.facing * 18, y: duckY() + 10, vx: -duck.facing * 60, vy: -40, life: 0.3, color: '#ff8c1a', size: 4 });
+  if (duck.moving) walkTime += dt * (power.speed > 0 ? 1.8 : 1);
+  if (power.speed > 0 && duck.moving && Math.random() < 0.6)
+    particles.push({ x: duck.x - duck.facing * 18, y: duckY() + 10, vx: -duck.facing * 60, vy: -40, life: 0.3, color: '#ff8c1a', size: 4, g: 600 });
 
   // Score and difficulty (each new level starts a little gentler, then ramps up)
-  const mult = power.cheese > 0 ? 3 : power.corn > 0 ? 2 : 1;
-  score += dt * 10 * mult;
-  const into = score - LEVELS[level].score;
-  speedUp = [1 + into / 400, 1.4 + into / 500, 1.6 + into / 600][level];
-  const interval = [Math.max(0.22, 0.75 - into / 900), Math.max(0.25, 0.6 - into / 1200), Math.max(0.25, 0.55 - into / 1400)][level];
+  const L = LEVELS[level];
+  score += dt * 10 * (power.x3 > 0 ? 3 : power.x2 > 0 ? 2 : 1);
+  const into = score - L.score;
+  speedUp = level === 0 ? 1 + into / 400 : L.base + into / 500;
+  const interval = level === 0 ? Math.max(0.22, 0.75 - into / 900) : Math.max(0.25, L.interval - into / 1200);
 
   // Spawn hazards and food
   spawnTimer -= worldDt;
   if (spawnTimer <= 0) { spawnThing(); spawnTimer = interval; }
   foodTimer -= dt;
-  if (foodTimer <= 0) { spawnFood(); foodTimer = 4 + Math.random() * 4; }
+  if (foodTimer <= 0) { spawnFood(); foodTimer = rnd(4, 8); }
 
   // Falling hazards
   const js = junk();
@@ -723,6 +1078,13 @@ function update(dt) {
     } else {
       t.y += t.vy * worldDt;
       t.wob += t.ws * worldDt;
+      if (t.zig) {                             // zig-zag (UFOs) or underwater sway
+        t.phase += worldDt * 2.5;
+        t.x = Math.max(t.w / 2, Math.min(W - t.w / 2, t.x0 + Math.sin(t.phase) * t.zig));
+      }
+      if (t.trail && worldDt > 0 && Math.random() < 0.7)   // fiery trail
+        particles.push({ x: t.x + rnd(-0.25, 0.25) * t.w, y: t.y - t.h * 0.4 * js, vx: 0, vy: -30,
+          life: 0.35, color: Math.random() < 0.5 ? '#ff8c1a' : '#ffcf3b', size: 5, g: 0 });
       if (t.y + t.h * js / 2 >= GROUND) {
         t.y = GROUND - t.h * js / 2;
         if (EXPLOSIVE.has(t.type)) { t.landed = true; t.fuse = 1.0; }
@@ -734,9 +1096,9 @@ function update(dt) {
       }
     }
     if (!t.dead && state === 'playing' && hitsDuck(t)) {
-      if (power.pizza > 0) continue;           // ghost duck passes right through
+      if (power.ghost > 0) continue;           // ghost duck passes right through
       t.dead = true;
-      if (power.turkeyLeg > 0) {               // mega duck smashes junk
+      if (power.mega > 0) {                    // mega duck smashes junk
         score += 10;
         if (EXPLOSIVE.has(t.type)) explode(t); else smash(t, 14);
       } else if (EXPLOSIVE.has(t.type)) explode(t); else hurt();
@@ -744,7 +1106,7 @@ function update(dt) {
   }
 
   // Laser beak zaps anything directly above the duck
-  if (power.hotDog > 0) {
+  if (power.laser > 0) {
     for (const t of things) {
       if (!t.dead && Math.abs(t.x - duck.x) < t.w * 0.4 * js + 6 && t.y < duckY()) {
         t.dead = true; smash(t, 12); score += 10;
@@ -753,8 +1115,11 @@ function update(dt) {
   }
   things = things.filter(t => !t.dead);
 
-  // Falling food (keeps falling even when time is frozen)
-  for (const f of foods) { f.y += f.vy * (worldDt || dt); f.bob += dt * 6; }
+  // Falling food (keeps falling even when time is frozen; the magnet pulls it in)
+  for (const f of foods) {
+    f.y += f.vy * (worldDt || dt); f.bob += dt * 6;
+    if (power.magnet > 0) { f.x += (duck.x - f.x) * Math.min(1, dt * 3); f.y += 120 * dt; }
+  }
   foods = foods.filter(f => {
     if (Math.hypot(f.x - duck.x, f.y - duckY()) < f.r + duckR()) { eat(f); return false; }
     return f.y < GROUND;
@@ -772,10 +1137,10 @@ function drawDuck(x, y, facing, frame, px) {
 }
 
 function drawBackground() {
-  if (bgMix < 1) BACKGROUNDS[prevLevel]();
-  ctx.globalAlpha = bgMix;
+  if (bgMix < 1) { drawAlpha = 1; ctx.globalAlpha = 1; BACKGROUNDS[prevLevel](); }
+  drawAlpha = bgMix; ctx.globalAlpha = bgMix;
   BACKGROUNDS[level]();
-  ctx.globalAlpha = 1;
+  drawAlpha = 1; ctx.globalAlpha = 1;
   // On phones, show a hint for the first 5 seconds of each game, fading out in the last second
   if (TOUCH && state === 'playing' && playTime < 5) {
     ctx.globalAlpha = Math.min(1, 5 - playTime);
@@ -793,8 +1158,8 @@ function draw() {
   drawBackground();
 
   // Slow-mo / freeze tints
-  if (state === 'playing' && power.popsicle > 0) { ctx.fillStyle = 'rgba(127,216,255,0.10)'; ctx.fillRect(0, 0, W, GROUND); }
-  if (state === 'playing' && power.pretzel > 0)  { ctx.fillStyle = 'rgba(159,243,255,0.18)'; ctx.fillRect(0, 0, W, GROUND); }
+  if (state === 'playing' && power.slow > 0)   { ctx.fillStyle = 'rgba(127,216,255,0.10)'; ctx.fillRect(0, 0, W, GROUND); }
+  if (state === 'playing' && power.freeze > 0) { ctx.fillStyle = 'rgba(159,243,255,0.18)'; ctx.fillRect(0, 0, W, GROUND); }
 
   if (state === 'playing' || state === 'over') {
     // Food (with a soft glow so it stands out from hazards)
@@ -808,7 +1173,7 @@ function draw() {
     const js = junk();
     for (const t of things) {
       ctx.save(); ctx.translate(t.x, t.y); ctx.scale(js, js);
-      if (!t.landed) ctx.rotate(Math.sin(t.wob) * 0.15);
+      if (!t.landed && t.type !== 'ufo') ctx.rotate(Math.sin(t.wob) * 0.15);
       ctx.drawImage(t.img, -t.w / 2, -t.h / 2);
       if (t.landed && Math.floor(t.fuse * 12) % 2 === 0) {   // blinking fuse warning
         ctx.globalAlpha = 0.6; ctx.fillStyle = '#fff'; ctx.fillRect(-t.w / 2, -t.h / 2, t.w, t.h); ctx.globalAlpha = 1;
@@ -816,32 +1181,37 @@ function draw() {
       ctx.restore();
     }
     // Laser beak beam
-    if (state === 'playing' && power.hotDog > 0) {
+    if (state === 'playing' && power.laser > 0) {
       const top = duckY() - sprite('duck1', duckPx()).height / 2;
       ctx.fillStyle = `rgba(198,255,90,${0.5 + Math.random() * 0.4})`; ctx.fillRect(duck.x - 3, 0, 6, top);
       ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillRect(duck.x - 1, 0, 2, top);
     }
+    // Snack magnet ring
+    if (state === 'playing' && power.magnet > 0) {
+      ctx.strokeStyle = `rgba(255,140,107,${0.35 + Math.sin(now() * 8) * 0.15})`; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(duck.x, duckY(), duckR() + 22, 0, Math.PI * 2); ctx.stroke();
+    }
     // Duck (blinks while invulnerable, see-through while a ghost, glows while mega)
     if (!(duck.invuln > 0 && Math.floor(duck.invuln * 12) % 2 === 0)) {
       const frame = duck.moving && Math.floor(walkTime * 10) % 2;
-      if (power.turkeyLeg > 0) {
+      if (power.mega > 0) {
         ctx.fillStyle = 'rgba(255,159,67,0.25)';
-        ctx.beginPath(); ctx.arc(duck.x, duckY(), duckR() + 14 + Math.sin(performance.now() / 90) * 3, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(duck.x, duckY(), duckR() + 14 + Math.sin(now() * 11) * 3, 0, Math.PI * 2); ctx.fill();
       }
-      if (power.pizza > 0) ctx.globalAlpha = 0.4 + Math.sin(performance.now() / 80) * 0.1;
+      if (power.ghost > 0) ctx.globalAlpha = 0.4 + Math.sin(now() * 12) * 0.1;
       drawDuck(duck.x, duckY() + (frame ? -2 : 0), duck.facing, frame, duckPx());
       ctx.globalAlpha = 1;
     }
     if (power.shield) {
       ctx.strokeStyle = 'rgba(78,225,193,0.8)'; ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.arc(duck.x, duckY(), duckR() + 12 + Math.sin(performance.now() / 150) * 2, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(duck.x, duckY(), duckR() + 12 + Math.sin(now() * 6.7) * 2, 0, Math.PI * 2); ctx.stroke();
     }
   }
 
   // Explosions, particles, popups
   for (const b of blasts) {
     const k = 1 - b.life / 0.4;
-    ctx.fillStyle = b.firework ? `rgba(185,140,255,${0.5 * (1 - k)})` : `rgba(255,${180 - k * 120},60,${0.7 * (1 - k)})`;
+    ctx.fillStyle = b.tint ? `rgba(${b.tint},${0.5 * (1 - k)})` : `rgba(255,${180 - k * 120},60,${0.7 * (1 - k)})`;
     ctx.beginPath(); ctx.arc(b.x, b.y, b.r * (0.4 + 0.6 * k), 0, Math.PI * 2); ctx.fill();
   }
   for (const p of particles) { ctx.fillStyle = p.color; ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size); }
@@ -854,18 +1224,28 @@ function draw() {
   ctx.restore();
 
   if (flash > 0) { ctx.fillStyle = `rgba(255,255,255,${flash * 1.5})`; ctx.fillRect(0, 0, W, H); }
-  if (banner > 0 && state === 'playing' && LEVELS[level].banner) drawBanner();
+  if (banner > 0 && state === 'playing' && level > 0) drawBanner();
   if (state === 'playing' || state === 'over') drawHud();
   if (state === 'menu') drawMenu();
-  if (state === 'over') {
-    ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0, 0, W, H);
-    centerText('QUACK! GAME OVER', GROUND / 2 - 30, 38, '#ff5d73');
-    centerText('Score: ' + Math.floor(score), GROUND / 2 + 25, 26, '#fff');
-    if (level === 2) centerText(restartLevel === 2 ? 'Castle tries left: ' + (3 - castleDeaths) : 'Out of Castle tries! Back to the City.', GROUND / 2 + 55, 16, '#ffb347');
-    else if (level > 0) centerText('You made it to the ' + LEVELS[level].name + '!', GROUND / 2 + 55, 16, LEVELS[level].color);
-    const again = restartLevel === 2 ? 'retry the Castle' : restartLevel === 1 ? 'restart at the City' : 'try again';
-    centerText((TOUCH ? 'Tap to ' : 'Click, tap, or press Space to ') + again, GROUND / 2 + 90, 16, '#ccd');
-  }
+  if (state === 'over') drawGameOver();
+}
+
+function drawGameOver() {
+  ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0, 0, W, H);
+  const L = LEVELS[level];
+  centerText('QUACK! GAME OVER', GROUND / 2 - 30, 38, '#ff5d73');
+  centerText('Score: ' + Math.floor(score), GROUND / 2 + 25, 26, '#fff');
+  let again = 'try again';
+  if (level >= CHECKPOINT_FROM) {
+    if (restartLevel === level) {
+      centerText(L.name + ' tries left: ' + (3 - levelDeaths), GROUND / 2 + 55, 16, L.color);
+      again = 'retry ' + L.the;
+    } else {
+      centerText('Out of tries! Back to ' + LEVELS[restartLevel].the + '.', GROUND / 2 + 55, 16, L.color);
+      again = 'restart at ' + LEVELS[restartLevel].the;
+    }
+  } else if (level > 0) centerText('You made it to ' + L.the + '!', GROUND / 2 + 55, 16, L.color);
+  centerText((TOUCH ? 'Tap to ' : 'Click, tap, or press Space to ') + again, GROUND / 2 + 90, 16, '#ccd');
 }
 
 // "LEVEL 2 / THE CITY" announcement, plus the new snacks to look for
@@ -873,8 +1253,8 @@ function drawBanner() {
   const L = LEVELS[level];
   ctx.globalAlpha = Math.min(1, banner);
   ctx.fillStyle = 'rgba(0,0,0,0.45)'; ctx.fillRect(0, 175, W, 150);
-  centerText(L.banner[0], 210, 20, '#fff');
-  centerText(L.banner[1], 255, 44, L.color);
+  centerText('LEVEL ' + (level + 1), 210, 20, '#fff');
+  centerText(L.the.toUpperCase(), 255, 44, L.color);
   centerText('New junk. New snacks:', 285, 14, '#ccd');
   let x = W / 2 - (L.foods.length * 44) / 2 + 8;
   for (const n of L.foods) { ctx.drawImage(sprite(n, 3), x, 293); x += 44; }
@@ -887,29 +1267,29 @@ function drawHud() {
   ctx.font = '16px monospace'; ctx.fillStyle = '#ccd';
   ctx.fillText('Best: ' + best, 20, 68);
   for (let i = 0; i < lives; i++) ctx.drawImage(sprite('heart', 3), 20 + i * 26, 80);
-  if (level === 2 && state === 'playing') centerText('Castle try ' + (castleDeaths + 1) + ' of 3', 30, 14, '#ffb347');
+  if (level >= CHECKPOINT_FROM && state === 'playing')
+    centerText(LEVELS[level].name + ' try ' + ((deathLevel === level ? levelDeaths : 0) + 1) + ' of 3', 30, 14, LEVELS[level].color);
 
   // Active power-ups, top right: icon + time bar
   let y = 24;
   const active = [];
-  if (power.shield) active.push(['donut', 1]);
-  for (const k of TIMED) if (power[k] > 0) active.push([k, power[k] / FOODS[k].dur]);
-  for (const [name, frac] of active) {
+  if (power.shield) active.push(['donut', 1, '#4ee1c1']);
+  for (const e of TIMED) if (power[e] > 0) { const n = powerIcon[e]; active.push([n, power[e] / FOODS[n].dur, FOODS[n].color]); }
+  for (const [name, frac, color] of active) {
     ctx.drawImage(sprite(name, 3), W - 110, y);
     ctx.fillStyle = 'rgba(255,255,255,.15)'; ctx.fillRect(W - 80, y + 8, 60, 8);
-    ctx.fillStyle = FOODS[name].color; ctx.fillRect(W - 80, y + 8, 60 * frac, 8);
+    ctx.fillStyle = color; ctx.fillRect(W - 80, y + 8, 60 * frac, 8);
     y += 34;
   }
 }
 
 function drawMenu() {
-  drawDuck(W / 2, GROUND - 26, 1, Math.floor(performance.now() / 300) % 2, 4);
+  drawDuck(W / 2, GROUND - 26, 1, Math.floor(now() / 0.3) % 2, 4);
   centerText('DODGE!', 120, 64, '#ffd93b');
   centerText('Help the duck dodge falling junk.', 170, 17, '#ccd');
   centerText('Watch out: TNT explodes when it lands!', 194, 15, '#ff8c6b');
-  centerText('500 points: the City. 1,000: the Castle!', 218, 15, '#b98cff');
+  centerText('6 worlds! A new one every 500 points.', 218, 15, '#b98cff');
 
-  // Hazard lineup
   const hz = ['bowlingBall', 'crate', 'tnt', 'piano'];
   let x = 70;
   for (const n of hz) { const img = sprite(n, 3); ctx.drawImage(img, x, 245 + (33 - img.height) / 2); x += img.width + 40; }

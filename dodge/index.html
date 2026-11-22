@@ -6,9 +6,9 @@
 <title>Dodge!</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; background: #0f1020; color: #fff; font-family: system-ui, sans-serif; overflow: hidden; touch-action: none; }
+  html, body { height: 100%; background: #0f1020; color: #fff; font-family: monospace; overflow: hidden; touch-action: none; }
   #wrap { display: flex; align-items: center; justify-content: center; height: 100%; }
-  canvas { background: linear-gradient(#1b1d3a, #2a1f4a); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.5); max-width: 100vw; max-height: 100vh; }
+  canvas { background: linear-gradient(#1b1d3a, #2a1f4a); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.5); max-width: 100vw; max-height: 100vh; image-rendering: pixelated; }
 </style>
 </head>
 <body>
@@ -18,8 +18,8 @@
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const W = canvas.width, H = canvas.height;
+const GROUND = H - 40;
 
-// Scale canvas to fit the screen while keeping its shape
 function fit() {
   const s = Math.min(window.innerWidth / W, window.innerHeight / H, 1.2);
   canvas.style.width = W * s + 'px';
@@ -27,20 +27,141 @@ function fit() {
 }
 window.addEventListener('resize', fit); fit();
 
+// ===== Pixel art =====
+// Each sprite is a grid of letters; each letter maps to a color ('.' = empty).
+const PALETTE = {
+  Y: '#ffd93b', W: '#e0b31c', K: '#1a1a1a', O: '#ff8c1a',           // duck
+  G: '#8a8fa3', g: '#4caf50', T: '#c8643b', B: '#3b6bdc', k: '#11152e',
+  N: '#8b5a2b', D: '#4a2e14', P: '#6a6f80', H: '#7a4a2a',
+  R: '#e63946', S: '#7fd35b', L: '#6b4226', b: '#b5651d', c: '#f5d58a'
+};
+const SPRITES = {
+  duck1: [
+    "....YYYY....",
+    "...YYYYYY...",
+    "...YYYKYYOO.",
+    "...YYYYYYOOO",
+    "....YYYYY...",
+    ".....YYY....",
+    "YY..YYYYYY..",
+    "YYYYYYYYYYY.",
+    "YYYYYWWYYYY.",
+    ".YYYYWWWYYY.",
+    "..YYYYYYYY..",
+    "...O....O...",
+    "..OO...OO..."
+  ],
+  duck2: [
+    "....YYYY....",
+    "...YYYYYY...",
+    "...YYYKYYOO.",
+    "...YYYYYYOOO",
+    "....YYYYY...",
+    ".....YYY....",
+    "YY..YYYYYY..",
+    "YYYYYYYYYYY.",
+    "YYYYYWWYYYY.",
+    ".YYYYWWWYYY.",
+    "..YYYYYYYY..",
+    "....O..O....",
+    "...OO.OO...."
+  ],
+  anvil: [
+    "GGGGGGGGGG",
+    "GGGGGGGGG.",
+    "...GGGG...",
+    "...GGGG...",
+    "..GGGGGG..",
+    ".GGGGGGGG."
+  ],
+  flowerpot: [
+    "..g..g..",
+    ".ggg.gg.",
+    "..gggg..",
+    "...gg...",
+    "TTTTTTTT",
+    ".TTTTTT.",
+    ".TTTTTT.",
+    "..TTTT.."
+  ],
+  bowlingBall: [
+    "..BBBB..",
+    ".BBBBBB.",
+    "BBBkBkBB",
+    "BBBBBBBB",
+    "BBBBkBBB",
+    "BBBBBBBB",
+    ".BBBBBB.",
+    "..BBBB.."
+  ],
+  boot: [
+    "..NNN...",
+    "..NNN...",
+    "..NNN...",
+    "..NNN...",
+    "..NNNNN.",
+    ".NNNNNNN",
+    "NNNNNNNN",
+    "DDDDDDDD"
+  ],
+  pan: [
+    ".PPPPP....",
+    "PPPPPPP...",
+    "PPPPPPPHHH",
+    "PPPPPPP...",
+    ".PPPPP...."
+  ],
+  apple: [
+    "...L....",
+    "...LS...",
+    ".RRRRRR.",
+    "RRRRRRRR",
+    "RRRRRRRR",
+    "RRRRRRRR",
+    ".RRRRRR.",
+    "..RRRR.."
+  ],
+  bread: [
+    ".bbbbbb.",
+    "bccccccb",
+    "bccccccb",
+    "bccccccb",
+    "bbbbbbbb"
+  ]
+};
+const HAZARDS = ['anvil', 'flowerpot', 'bowlingBall', 'boot', 'pan', 'apple'];
+
+// Pre-render each sprite once at a given pixel size, so drawing is fast.
+const cache = {};
+function sprite(name, px) {
+  const key = name + px;
+  if (cache[key]) return cache[key];
+  const rows = SPRITES[name];
+  const c = document.createElement('canvas');
+  c.width = rows[0].length * px; c.height = rows.length * px;
+  const g = c.getContext('2d');
+  rows.forEach((row, y) => [...row].forEach((ch, x) => {
+    if (ch === '.') return;
+    g.fillStyle = PALETTE[ch];
+    g.fillRect(x * px, y * px, px, px);
+  }));
+  return cache[key] = c;
+}
+
 // ===== Game state =====
-let state = 'menu';            // 'menu' | 'playing' | 'over'
-let player, rocks, stars, score, best = 0, spawnTimer, speedUp, lastTime;
+let state = 'menu';
+let duck, things, crumbs, score, best = 0, spawnTimer, speedUp, lastTime, walkTime = 0;
 
 function reset() {
-  player = { x: W / 2, y: H - 80, r: 18, speed: 380 };
-  rocks = [];
-  stars = [];
+  duck = { x: W / 2, y: GROUND - 26, r: 20, speed: 380, facing: 1, moving: false };
+  things = [];
+  crumbs = [];
   score = 0;
   spawnTimer = 0;
   speedUp = 1;
 }
 
-// ===== Input (keyboard + mouse/touch) =====
+// ===== Input =====
 const keys = {};
 let pointerX = null;
 addEventListener('keydown', e => {
@@ -48,7 +169,6 @@ addEventListener('keydown', e => {
   if ((e.key === ' ' || e.key === 'Enter') && state !== 'playing') start();
 });
 addEventListener('keyup', e => keys[e.key] = false);
-
 function toCanvasX(clientX) {
   const rect = canvas.getBoundingClientRect();
   return (clientX - rect.left) * (W / rect.width);
@@ -56,65 +176,66 @@ function toCanvasX(clientX) {
 canvas.addEventListener('pointerdown', e => { if (state !== 'playing') start(); pointerX = toCanvasX(e.clientX); });
 canvas.addEventListener('pointermove', e => { if (e.buttons || e.pointerType === 'touch') pointerX = toCanvasX(e.clientX); });
 canvas.addEventListener('pointerup', () => pointerX = null);
-
 function start() { reset(); state = 'playing'; }
 
 // ===== Spawning =====
-function spawnRock() {
-  const r = 14 + Math.random() * 22;
-  rocks.push({
-    x: r + Math.random() * (W - r * 2),
-    y: -r,
-    r,
+function spawnThing() {
+  const name = HAZARDS[Math.floor(Math.random() * HAZARDS.length)];
+  const px = 3 + Math.floor(Math.random() * 3);           // pixel size 3–5 → small to big
+  const img = sprite(name, px);
+  const r = Math.min(img.width, img.height) * 0.42;
+  things.push({
+    img, r,
+    x: img.width / 2 + Math.random() * (W - img.width),
+    y: -img.height,
     vy: (160 + Math.random() * 140) * speedUp,
-    spin: Math.random() * Math.PI,
-    vs: (Math.random() - 0.5) * 4
+    wob: Math.random() * 6,
+    ws: 3 + Math.random() * 3
   });
 }
-function spawnStar() {
-  stars.push({ x: 20 + Math.random() * (W - 40), y: -12, r: 10, vy: 180 * speedUp });
+function spawnCrumb() {
+  const img = sprite('bread', 3);
+  crumbs.push({ img, x: 20 + Math.random() * (W - 40), y: -20, r: 14, vy: 170 * speedUp, bob: 0 });
 }
 
 // ===== Update =====
 function update(dt) {
   if (state !== 'playing') return;
 
-  // Move player
   let dx = 0;
   if (keys['ArrowLeft'] || keys['a']) dx -= 1;
   if (keys['ArrowRight'] || keys['d']) dx += 1;
   if (pointerX !== null) {
-    const diff = pointerX - player.x;
+    const diff = pointerX - duck.x;
     dx = Math.abs(diff) < 4 ? 0 : Math.sign(diff) * Math.min(1, Math.abs(diff) / 40);
   }
-  player.x += dx * player.speed * dt;
-  player.x = Math.max(player.r, Math.min(W - player.r, player.x));
+  duck.x += dx * duck.speed * dt;
+  duck.x = Math.max(duck.r + 4, Math.min(W - duck.r - 4, duck.x));
+  duck.moving = dx !== 0;
+  if (dx) duck.facing = Math.sign(dx);
+  if (duck.moving) walkTime += dt;
 
-  // Difficulty ramps up over time
   score += dt * 10;
   speedUp = 1 + score / 300;
 
   spawnTimer -= dt;
   if (spawnTimer <= 0) {
-    spawnRock();
-    if (Math.random() < 0.12) spawnStar();
+    spawnThing();
+    if (Math.random() < 0.12) spawnCrumb();
     spawnTimer = Math.max(0.18, 0.7 - score / 800);
   }
 
-  // Rocks
-  for (const r of rocks) { r.y += r.vy * dt; r.spin += r.vs * dt; }
-  rocks = rocks.filter(r => r.y - r.r < H);
+  for (const t of things) { t.y += t.vy * dt; t.wob += t.ws * dt; }
+  things = things.filter(t => t.y - t.r < H);
 
-  // Stars (bonus points)
-  for (const s of stars) s.y += s.vy * dt;
-  stars = stars.filter(s => {
-    if (dist(s, player) < s.r + player.r) { score += 50; return false; }
-    return s.y - s.r < H;
+  for (const c of crumbs) { c.y += c.vy * dt; c.bob += dt * 6; }
+  crumbs = crumbs.filter(c => {
+    if (dist(c, duck) < c.r + duck.r) { score += 50; return false; }
+    return c.y < H + 20;
   });
 
-  // Collisions
-  for (const r of rocks) {
-    if (dist(r, player) < r.r * 0.85 + player.r * 0.85) {
+  for (const t of things) {
+    if (dist(t, duck) < t.r * 0.85 + duck.r * 0.85) {
       state = 'over';
       best = Math.max(best, Math.floor(score));
     }
@@ -123,60 +244,57 @@ function update(dt) {
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
 // ===== Draw =====
+function drawDuck(x, y, facing, frame) {
+  const img = sprite(frame ? 'duck2' : 'duck1', 4);
+  ctx.save();
+  ctx.translate(Math.round(x), Math.round(y));
+  ctx.scale(facing, 1);
+  ctx.drawImage(img, -img.width / 2, -img.height / 2);
+  ctx.restore();
+}
+
 function draw() {
+  ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, W, H);
 
-  if (state === 'playing' || state === 'over') {
-    // Stars
-    for (const s of stars) drawStar(s.x, s.y, s.r, '#ffd84a');
-    // Rocks
-    for (const r of rocks) {
-      ctx.save(); ctx.translate(r.x, r.y); ctx.rotate(r.spin);
-      ctx.fillStyle = '#ff5d73';
-      ctx.beginPath();
-      for (let i = 0; i < 7; i++) {
-        const a = (i / 7) * Math.PI * 2, rr = r.r * (0.8 + (i % 2) * 0.2);
-        ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr);
-      }
-      ctx.closePath(); ctx.fill(); ctx.restore();
-    }
-    // Player
-    ctx.fillStyle = '#4ee1c1';
-    ctx.beginPath(); ctx.arc(player.x, player.y, player.r, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#0f1020';
-    ctx.beginPath(); ctx.arc(player.x - 6, player.y - 4, 3, 0, Math.PI * 2); ctx.arc(player.x + 6, player.y - 4, 3, 0, Math.PI * 2); ctx.fill();
+  // Ground
+  ctx.fillStyle = '#2f6b3a'; ctx.fillRect(0, GROUND, W, H - GROUND);
+  ctx.fillStyle = '#3f8a4c'; ctx.fillRect(0, GROUND, W, 6);
 
-    // Score
-    ctx.fillStyle = '#fff'; ctx.font = 'bold 28px system-ui'; ctx.textAlign = 'left';
+  if (state === 'playing' || state === 'over') {
+    for (const c of crumbs) ctx.drawImage(c.img, c.x - c.img.width / 2, c.y - c.img.height / 2 + Math.sin(c.bob) * 2);
+    for (const t of things) {
+      ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(Math.sin(t.wob) * 0.2);
+      ctx.drawImage(t.img, -t.img.width / 2, -t.img.height / 2);
+      ctx.restore();
+    }
+    const frame = duck.moving && Math.floor(walkTime * 10) % 2;
+    drawDuck(duck.x, duck.y + (frame ? -2 : 0), duck.facing, frame);
+
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 28px monospace'; ctx.textAlign = 'left';
     ctx.fillText(Math.floor(score), 20, 44);
-    ctx.font = '16px system-ui'; ctx.fillStyle = '#aab';
+    ctx.font = '16px monospace'; ctx.fillStyle = '#aab';
     ctx.fillText('Best: ' + best, 20, 68);
   }
 
   if (state === 'menu') {
-    centerText('DODGE!', H / 2 - 60, 64, '#4ee1c1');
-    centerText('Avoid the red rocks. Grab the gold stars.', H / 2, 18, '#ccd');
-    centerText('← → or A/D to move · drag on phones', H / 2 + 30, 16, '#99a');
-    centerText('Click, tap, or press Space to start', H / 2 + 90, 20, '#fff');
+    drawDuck(W / 2, GROUND - 26, 1, Math.floor(performance.now() / 300) % 2);
+    centerText('DODGE!', H / 2 - 90, 64, '#ffd93b');
+    centerText('Help the duck dodge falling junk.', H / 2 - 30, 18, '#ccd');
+    centerText('Grab the bread for bonus points.', H / 2 - 4, 18, '#ccd');
+    centerText('← → or A/D to move · drag on phones', H / 2 + 30, 15, '#99a');
+    centerText('Click, tap, or press Space to start', H / 2 + 90, 18, '#fff');
   }
   if (state === 'over') {
     ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0, 0, W, H);
-    centerText('GAME OVER', H / 2 - 50, 52, '#ff5d73');
+    centerText('QUACK! GAME OVER', H / 2 - 50, 38, '#ff5d73');
     centerText('Score: ' + Math.floor(score), H / 2 + 5, 26, '#fff');
-    centerText('Click, tap, or press Space to try again', H / 2 + 60, 18, '#ccd');
+    centerText('Click, tap, or press Space to try again', H / 2 + 60, 16, '#ccd');
   }
 }
 function centerText(t, y, size, color) {
-  ctx.fillStyle = color; ctx.font = `bold ${size}px system-ui`; ctx.textAlign = 'center';
+  ctx.fillStyle = color; ctx.font = `bold ${size}px monospace`; ctx.textAlign = 'center';
   ctx.fillText(t, W / 2, y);
-}
-function drawStar(x, y, r, color) {
-  ctx.fillStyle = color; ctx.beginPath();
-  for (let i = 0; i < 10; i++) {
-    const a = (i / 10) * Math.PI * 2 - Math.PI / 2, rr = i % 2 ? r * 0.45 : r;
-    ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr);
-  }
-  ctx.closePath(); ctx.fill();
 }
 
 // ===== Main loop =====

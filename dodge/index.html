@@ -215,13 +215,13 @@ function sprite(name, px) {
 // ===== Game state =====
 let state = 'menu';
 let duck, things, foods, particles, blasts, popups, power;
-let score, best = 0, spawnTimer, foodTimer, speedUp, lastTime, walkTime = 0, shake = 0;
+let score, best = 0, spawnTimer, foodTimer, speedUp, lastTime, walkTime = 0, shake = 0, playTime = 0;
 
 function reset() {
   duck = { x: W / 2, facing: 1, moving: false, invuln: 0 };
   things = []; foods = []; particles = []; blasts = []; popups = [];
   power = { chili: 0, mushroom: 0, popsicle: 0, corn: 0, shield: false };
-  score = 0; spawnTimer = 0; foodTimer = 3; speedUp = 1; shake = 0;
+  score = 0; spawnTimer = 0; foodTimer = 3; speedUp = 1; shake = 0; playTime = 0;
 }
 
 // Duck size depends on the mushroom power-up
@@ -325,6 +325,7 @@ function update(dt) {
   shake = Math.max(0, shake - dt);
 
   if (state !== 'playing') return;
+  playTime += dt;
 
   // Power-up timers
   for (const k of ['chili', 'mushroom', 'popsicle', 'corn']) power[k] = Math.max(0, power[k] - dt);
@@ -428,6 +429,13 @@ function draw() {
     // Grass tufts
     ctx.fillStyle = '#3f8a4c';
     for (let x = 12; x < W; x += 37) ctx.fillRect(x, GROUND + 22 + (x * 7 % 70), 4, 8);
+    // Show a hint for the first 5 seconds of each game, fading out in the last second
+    if (state === 'playing' && playTime < 5) {
+      ctx.globalAlpha = Math.min(1, 5 - playTime);
+      ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.font = 'bold 18px monospace'; ctx.textAlign = 'center';
+      ctx.fillText('\u2190  drag here to move  \u2192', W / 2, GROUND + 68);
+      ctx.globalAlpha = 1;
+    }
   }
 
   if (state === 'playing' || state === 'over') {

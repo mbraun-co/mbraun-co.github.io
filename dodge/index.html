@@ -17,8 +17,12 @@
 // ===== Setup =====
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
+// On touch screens (phones/tablets), add a tall strip of grass below the duck
+// so your thumb has room to drag without covering the play area.
+const TOUCH = matchMedia('(pointer: coarse)').matches;
+if (TOUCH) canvas.height = 880;
 const W = canvas.width, H = canvas.height;
-const GROUND = H - 40;
+const GROUND = TOUCH ? H - 200 : H - 40;
 
 function fit() {
   const s = Math.min(window.innerWidth / W, window.innerHeight / H, 1.2);
@@ -420,6 +424,13 @@ function draw() {
   // Ground
   ctx.fillStyle = '#2f6b3a'; ctx.fillRect(-20, GROUND, W + 40, H - GROUND + 20);
   ctx.fillStyle = '#3f8a4c'; ctx.fillRect(-20, GROUND, W + 40, 6);
+  if (TOUCH) {
+    // Grass tufts and a hint showing where to drag
+    ctx.fillStyle = '#3f8a4c';
+    for (let x = 12; x < W; x += 37) ctx.fillRect(x, GROUND + 40 + (x * 7 % 90), 4, 8);
+    ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.font = 'bold 18px monospace'; ctx.textAlign = 'center';
+    ctx.fillText('\u2190  drag here to move  \u2192', W / 2, GROUND + 105);
+  }
 
   if (state === 'playing' || state === 'over') {
     // Food (with a soft glow so it stands out from hazards)
@@ -469,9 +480,9 @@ function draw() {
   if (state === 'menu') drawMenu();
   if (state === 'over') {
     ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0, 0, W, H);
-    centerText('QUACK! GAME OVER', H / 2 - 50, 38, '#ff5d73');
-    centerText('Score: ' + Math.floor(score), H / 2 + 5, 26, '#fff');
-    centerText('Click, tap, or press Space to try again', H / 2 + 60, 16, '#ccd');
+    centerText('QUACK! GAME OVER', GROUND / 2 - 30, 38, '#ff5d73');
+    centerText('Score: ' + Math.floor(score), GROUND / 2 + 25, 26, '#fff');
+    centerText(TOUCH ? 'Tap to try again' : 'Click, tap, or press Space to try again', GROUND / 2 + 80, 16, '#ccd');
   }
 }
 
@@ -515,8 +526,8 @@ function drawMenu() {
     ctx.fillText(FOODS[n].desc, 145, y + 18);
     y += 36;
   }
-  centerText('← → or A/D to move · drag on phones', 560, 14, '#99a');
-  centerText('Click, tap, or press Space to start', 595, 18, '#fff');
+  centerText(TOUCH ? 'Drag on the grass to move' : '← → or A/D to move · drag on phones', 560, 14, '#99a');
+  centerText(TOUCH ? 'Tap to start' : 'Click, tap, or press Space to start', 595, 18, '#fff');
 }
 
 function centerText(t, y, size, color) {

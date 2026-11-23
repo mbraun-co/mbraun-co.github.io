@@ -247,8 +247,8 @@ function addBuilding() {
     for (let tries = 0; tries < 8; tries++) {
       const px = b.x + rnd(90, w - 140);
       if (obstacles.some(o => o.x < px + 90 && o.x + o.w > px - 90 && !o.vx)) continue;
-      const types = ['buff', 'tiny', 'jump'];
-      powerups.push({ x: px, y: b.top - (Math.random() < 0.4 ? 110 : 32), type: types[(Math.random() * 3) | 0], ph: Math.random() * 6 });
+      const r = Math.random() * 2.3, type = r < 0.3 ? 'buff' : r < 1.3 ? 'tiny' : 'jump';   // buff is ~1 in 8
+      powerups.push({ x: px, y: b.top - (type === 'buff' || Math.random() < 0.4 ? 110 : 32), type, ph: Math.random() * 6 });
       break;
     }
   }
@@ -563,6 +563,12 @@ function animalCry(o) {
   else if (o.t === 'armadillo') sfx.whiff();
   else o.flee ? sfx.yelp() : sfx.bark();
 }
+function scare(o) {
+  if (o.flee) return;
+  o.flee = true;
+  if (o.t === 'pigeons') { o.vx = curSpeed() + 420; sfx.whiff(); }
+  else animalCry(o);
+}
 function buffHit(o) {
   shake = 0.25;
   const c = o.t === 'smokestack' || o.t === 'antenna' || o.t === 'vent' || o.t === 'pipe' || o.t === 'dish' || o.t === 'solar' ? [140, 145, 160]
@@ -685,6 +691,10 @@ function step(dt) {
       if (o.y > H + 60) o.dead = true;
       if (dx < 300 && dx > 0 && !o.barked && !o.flee) { o.barked = true; animalCry(o); }
     }
+    if (o.t === 'pigeons') {
+      if (!o.flee && powerIs('buff') && o.x - P.x < 430 && o.x - P.x > -20) scare(o);
+      if (o.flee) { o.vx = curSpeed() + P.bonus + 420; o.y -= 260 * dt; if (o.y < -40) o.dead = true; }
+    }
     if (o.rot !== undefined && o.t !== 'armadillo') o.rot += o.vx * dt / 17;
     if (o.x < o.minX) { o.x = o.minX; o.vx = 0; }
     if (o.flee && o.x > camX + W + 200) o.dead = true;
@@ -696,6 +706,9 @@ function step(dt) {
     if (r > o.x && l < o.x + o.w && bt > o.y && t < o.y + o.h) {
       if (o.flee) continue;
       if (powerIs('tiny') && (o.t === 'sign' || o.t === 'duct' || o.t === 'pigeons')) continue;
+      const flyer = o.fly || o.t === 'eagle' || o.t === 'pigeons';
+      if (P.flat && flyer) continue;                            // squished flat: flyers swoop right over you
+      if (powerIs('buff') && (isAnimal(o) || o.t === 'pigeons')) { scare(o); continue; }   // buff scares off any animal
       if (isAnimal(o)) { die(o.t); return; }                   // animals always get you
       if (powerIs('buff') && !(o.solid && P.prevY - P.leg <= o.y + 6 && P.vy >= 0)) { buffHit(o); continue; }
       if (o.solid && P.prevY - P.leg <= o.y + 6 && P.vy >= 0) { P.y = o.y + P.leg; landed = true; }

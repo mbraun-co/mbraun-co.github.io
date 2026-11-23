@@ -383,6 +383,139 @@ function drawNewAnimal(o, x) {
   if (o.flee) ctx.restore();
 }
 
+// ---------- one new rooftop object per level ----------
+const NEW_OBJECTS = {
+  trampoline: { lv: 1, label: 'trampolines', msg: 'Bonked a trampoline frame!',
+    make: (x, T) => ({ t: 'trampoline', x, y: T - 22, w: 64, h: 22, solid: true, bounce: true, sq: 0 }),
+    draw(o, x) {
+      const s = o.sq || 0; o.sq = Math.max(0, s - 0.05);
+      ctx.strokeStyle = '#3d4152'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(x + 8, o.y + o.h); ctx.lineTo(x + 12, o.y + 6); ctx.moveTo(x + o.w - 8, o.y + o.h); ctx.lineTo(x + o.w - 12, o.y + 6); ctx.stroke();
+      ctx.fillStyle = '#2b6cff'; ctx.fillRect(x, o.y + 2, o.w, 7);
+      ctx.fillStyle = '#16181f'; ctx.beginPath(); ctx.ellipse(x + o.w / 2, o.y + 5 + s * 8, o.w / 2 - 6, 3 + s * 5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fillRect(x, o.y + 2, o.w, 2);
+    } },
+  laundry: { lv: 2, label: 'laundry lines', msg: 'Tangled in the laundry! (Squish under it)', squish: true,
+    make: (x, T) => ({ t: 'laundry', x, y: T - 26 - 230, w: 120, h: 230, solid: false }),
+    draw(o, x) {
+      const ly = o.y + o.h - 40;
+      ctx.strokeStyle = '#555a75'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x + 4, -10); ctx.lineTo(x + 4, ly); ctx.moveTo(x + o.w - 4, -10); ctx.lineTo(x + o.w - 4, ly); ctx.stroke();
+      ctx.strokeStyle = '#d8d8e0'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(x + 4, ly); ctx.quadraticCurveTo(x + o.w / 2, ly + 10, x + o.w - 4, ly); ctx.stroke();
+      const cols = ['#ff6b6b', '#ffd93b', '#6bcBff', '#b28dff', '#7cff9b'];
+      for (let i = 0; i < 5; i++) {
+        const cx = x + 14 + i * 23, cy = ly + 3 + Math.sin(i * 1.3) * 2, sway = Math.sin(time * 2 + i) * 2;
+        ctx.fillStyle = cols[i];
+        if (i % 2) { ctx.fillRect(cx - 9 + sway, cy, 18, 28); ctx.fillRect(cx - 12 + sway, cy, 24, 8); }      // t-shirt
+        else { ctx.fillRect(cx - 4 + sway, cy, 8, 30); ctx.fillRect(cx - 4 + sway, cy + 30, 13, 6); }          // sock
+        ctx.fillStyle = '#8a6a4a'; ctx.fillRect(cx - 1, cy - 3, 3, 6);
+      }
+    } },
+  cart: { lv: 3, label: 'shopping carts', msg: 'Run over by a shopping cart! (Jump it or smash it as a Ball)',
+    make: (x, T) => ({ t: 'cart', x: x + 200, y: T - 36, w: 48, h: 36, solid: false, brk: true, vx: -230, minX: -1e9, rot: 0 }),
+    draw(o, x) {
+      ctx.strokeStyle = '#b8bfcc'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x + 2, o.y + 4); ctx.lineTo(x + o.w - 6, o.y + 4); ctx.lineTo(x + o.w - 10, o.y + 24); ctx.lineTo(x + 8, o.y + 24); ctx.closePath(); ctx.stroke();
+      for (let i = 1; i < 5; i++) { ctx.beginPath(); ctx.moveTo(x + 2 + i * 9, o.y + 4); ctx.lineTo(x + 5 + i * 8, o.y + 24); ctx.stroke(); }
+      ctx.beginPath(); ctx.moveTo(x + o.w - 6, o.y + 4); ctx.lineTo(x + o.w + 2, o.y - 4); ctx.stroke();
+      ctx.fillStyle = '#ff4d4d'; ctx.fillRect(x + o.w - 1, o.y - 7, 7, 4);
+      ctx.fillStyle = '#2a2d38';
+      for (const wx of [x + 12, x + o.w - 14]) { ctx.beginPath(); ctx.arc(wx, o.y + o.h - 5, 5, 0, Math.PI * 2); ctx.fill(); }
+    } },
+  garden: { lv: 4, label: 'rooftop gardens', msg: 'Faceplanted in a tomato garden! (Jump on it, or smash it as a Ball)',
+    make: (x, T) => ({ t: 'garden', x, y: T - 30, w: 66, h: 30, solid: true, brk: true }),
+    draw(o, x) {
+      ctx.fillStyle = '#8a5a34'; ctx.fillRect(x, o.y + 12, o.w, o.h - 12);
+      ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.fillRect(x, o.y + 20, o.w, 2);
+      ctx.fillStyle = '#4a3020'; ctx.fillRect(x + 3, o.y + 10, o.w - 6, 4);
+      for (let i = 0; i < 4; i++) {
+        const px = x + 9 + i * 16;
+        ctx.strokeStyle = '#3f8f3a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(px, o.y + 12); ctx.lineTo(px + Math.sin(time + i) * 2, o.y - 8); ctx.stroke();
+        ctx.fillStyle = '#4fae46'; ctx.beginPath(); ctx.ellipse(px - 4, o.y - 2, 5, 3, -0.5, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(px + 4, o.y - 6, 5, 3, 0.5, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#e8352b'; ctx.beginPath(); ctx.arc(px + 1, o.y + 2, 3.5, 0, Math.PI * 2); ctx.fill();
+      }
+    } },
+  conveyor: { lv: 5, label: 'conveyor belts', msg: '', helper: 'boost',
+    make: (x, T) => ({ t: 'conveyor', x, y: T - 8, w: 150, h: 8, solid: false, helper: 'boost' }),
+    draw(o, x) {
+      ctx.fillStyle = '#2d2f3a'; ctx.fillRect(x, o.y, o.w, o.h);
+      ctx.fillStyle = '#ffcc33';
+      const off = (time * 120) % 20;
+      for (let i = -1; i < o.w / 20 + 1; i++) {
+        const cx = x + i * 20 + off; if (cx < x || cx > x + o.w - 8) continue;
+        ctx.beginPath(); ctx.moveTo(cx, o.y + 1); ctx.lineTo(cx + 6, o.y + 4); ctx.lineTo(cx, o.y + 7); ctx.fill();
+      }
+      ctx.fillStyle = '#6d7287'; ctx.beginPath(); ctx.arc(x, o.y + 4, 4, 0, Math.PI * 2); ctx.arc(x + o.w, o.y + 4, 4, 0, Math.PI * 2); ctx.fill();
+    } },
+  wreck: { lv: 6, label: 'wrecking balls', msg: 'Smashed by a wrecking ball! (Squish under it when it swings low)',
+    make: (x, T) => ({ t: 'wreck', x: x + 30, y: T - 300, w: 380, h: 300, solid: false, ax: x + 220, ay: T - 260, L: 214, ph: Math.random() * 6 }),
+    ball(o) { const a = Math.sin(time * 1.7 + o.ph) * 1.0; return [o.ax + o.L * Math.sin(a), o.ay + o.L * Math.cos(a)]; },
+    draw(o) {
+      const [bx, by] = this.ball(o), ax = o.ax - camX, bxs = bx - camX;
+      ctx.fillStyle = '#e0b020'; ctx.fillRect(ax - 60, -10, 120, 8);
+      ctx.strokeStyle = '#6d7287'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(ax, -2); ctx.lineTo(ax, o.ay); ctx.lineTo(bxs, by); ctx.stroke();
+      const g = ctx.createRadialGradient(bxs - 7, by - 7, 3, bxs, by, 22);
+      g.addColorStop(0, '#7c8194'); g.addColorStop(1, '#25272f');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(bxs, by, 20, 0, Math.PI * 2); ctx.fill();
+    } },
+  billboard: { lv: 7, label: 'billboard towers', msg: 'Smacked a billboard tower! (Stilt over it)',
+    make: (x, T) => ({ t: 'billboard', x, y: T - 190, w: 74, h: 190, solid: false, word: ['SLIME', 'GOO!', 'JELLO', 'BLOB'][(Math.random() * 4) | 0] }),
+    draw(o, x) {
+      ctx.fillStyle = '#4c5064'; ctx.fillRect(x + o.w / 2 - 5, o.y + 50, 10, o.h - 50);
+      ctx.strokeStyle = '#3d4152'; ctx.lineWidth = 2; ctx.beginPath();
+      for (let yy = o.y + 60; yy < o.y + o.h - 10; yy += 24) { ctx.moveTo(x + o.w / 2 - 5, yy); ctx.lineTo(x + o.w / 2 + 5, yy + 12); }
+      ctx.stroke();
+      ctx.fillStyle = '#1a1030'; ctx.fillRect(x, o.y, o.w, 52);
+      ctx.strokeStyle = '#ff9a3c'; ctx.lineWidth = 3; ctx.strokeRect(x + 3, o.y + 3, o.w - 6, 46);
+      ctx.fillStyle = '#ffe08a'; ctx.font = 'bold 16px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(o.word, x + o.w / 2, o.y + 27);
+    } },
+  tire: { lv: 8, label: 'bouncing tires', msg: 'Flattened by a bouncing tire! (Time your jump, or stilt over it)',
+    make: (x, T) => ({ t: 'tire', x: x + 240, y: T - 34, baseY: T - 34, w: 34, h: 34, solid: false, vx: -210, minX: -1e9, rot: 0 }),
+    draw(o, x) {
+      const cx = x + o.w / 2, cy = o.y + o.h / 2;
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate(o.rot || 0);
+      ctx.fillStyle = '#1d1e24'; ctx.beginPath(); ctx.arc(0, 0, 17, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#9aa0b0'; ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#33353f'; ctx.lineWidth = 2;
+      for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; ctx.beginPath(); ctx.moveTo(Math.cos(a) * 11, Math.sin(a) * 11); ctx.lineTo(Math.cos(a) * 16, Math.sin(a) * 16); ctx.stroke(); }
+      ctx.restore();
+    } },
+  fan: { lv: 9, label: 'wind fans', msg: '', helper: 'lift',
+    make: (x, T) => ({ t: 'fan', x, y: T - 200, w: 56, h: 200, solid: false, helper: 'lift' }),
+    draw(o, x) {
+      const by = o.y + o.h;
+      for (let i = 0; i < 9; i++) {
+        const t2 = (time * 1.4 + i / 9) % 1;
+        ctx.strokeStyle = `rgba(220,240,255,${0.35 * (1 - t2)})`; ctx.lineWidth = 1.5;
+        const sx = x + 8 + (i % 4) * 13;
+        ctx.beginPath(); ctx.moveTo(sx, by - 20 - t2 * 170); ctx.lineTo(sx + Math.sin(t2 * 8 + i) * 3, by - 34 - t2 * 170); ctx.stroke();
+      }
+      ctx.fillStyle = '#6d7287'; ctx.fillRect(x, by - 18, o.w, 18);
+      ctx.fillStyle = '#3d4152'; ctx.fillRect(x + 4, by - 16, o.w - 8, 4);
+      ctx.save(); ctx.translate(x + o.w / 2, by - 14); ctx.scale(1, 0.3);
+      ctx.fillStyle = '#c8cedd';
+      for (let i = 0; i < 4; i++) { ctx.rotate(Math.PI / 2 + time * 0); ctx.beginPath(); ctx.ellipse(Math.cos(time * 20) * 0 + 12, 0, 12, 5, 0, 0, Math.PI * 2); ctx.fill(); }
+      ctx.restore();
+      ctx.fillStyle = '#ffcc33'; ctx.fillRect(x, by - 3, o.w, 3);
+    } },
+  mower: { lv: 10, label: 'robot mowers', msg: 'Mowed down by a robot mower! (Jump over it)',
+    make: (x, T) => ({ t: 'mower', x, x0: x, y: T - 26, w: 46, h: 26, solid: false, vx: 1e-6, minX: -1e9, ph: Math.random() * 6 }),
+    draw(o, x) {
+      const dir = Math.cos(time * 1.3 + o.ph) >= 0 ? 1 : -1;
+      ctx.fillStyle = '#d63a3a'; ctx.beginPath(); ctx.moveTo(x + 4, o.y + 18); ctx.lineTo(x + 10, o.y + 4); ctx.lineTo(x + o.w - 10, o.y + 4); ctx.lineTo(x + o.w - 4, o.y + 18); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#9b2626'; ctx.fillRect(x + 4, o.y + 16, o.w - 8, 5);
+      ctx.fillStyle = '#1d1e24'; for (const wx of [x + 10, x + o.w - 10]) { ctx.beginPath(); ctx.arc(wx, o.y + o.h - 4, 4.5, 0, Math.PI * 2); ctx.fill(); }
+      ctx.fillStyle = '#7dfcff'; ctx.fillRect(x + o.w / 2 - 7 + dir * 5, o.y + 7, 6, 4); ctx.fillRect(x + o.w / 2 + 1 + dir * 5, o.y + 7, 6, 4);
+      ctx.strokeStyle = '#555'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x + o.w / 2, o.y + 4); ctx.lineTo(x + o.w / 2, o.y - 6); ctx.stroke();
+      ctx.fillStyle = '#7dfcff'; ctx.beginPath(); ctx.arc(x + o.w / 2, o.y - 7, 2.2, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(120,220,90,0.7)';
+      for (let i = 0; i < 3; i++) { const t2 = (time * 3 + i / 3) % 1; ctx.fillRect(x + o.w / 2 - dir * (10 + t2 * 18), o.y + 18 - t2 * 10, 2, 2); }
+    } },
+};
+
 function placeObstacle(b, x, diff, end, force) {
   const T = b.top, far = b.x;
   const opts = [['ac', 2], ['crate', 2], ['antenna', 1.1], ['chimney', 1.6], ['dish', 1.4],
@@ -395,6 +528,7 @@ function placeObstacle(b, x, diff, end, force) {
   if (far > 1200) opts.push(['armadillo', level > 1 ? 2 : 1.3]);
   if (level > 1) opts.push(['cat', 2.2 + diff], ['barrel', 1], ['bobcat', 2.2 + diff], ['eagle', 2 + diff]);
   for (const k in NEW_ANIMALS) if (NEW_ANIMALS[k].lv <= level) opts.push([k, NEW_ANIMALS[k].lv === level ? 3.5 : 2]);
+  for (const k in NEW_OBJECTS) if (NEW_OBJECTS[k].lv <= level && (k !== 'laundry' || x > b.x + 280)) opts.push([k, NEW_OBJECTS[k].lv === level ? (level === 1 ? 2.2 : 3.2) : 1.5]);
   const prog = level > 1 ? 1 : clamp(score() / 1000, 0, 1);          // how close to the end of level 1
   const squishy = (1 + 4 * prog * prog) * (level > 1 ? 1.4 + 0.1 * (level - 2) : 1);
   if (far > 2500 && x > b.x + 280) opts.push(['sign', (1.1 + diff * 1.8) * squishy]);
@@ -406,6 +540,11 @@ function placeObstacle(b, x, diff, end, force) {
   if (force) t = force;
   let o;
   if (NEW_ANIMALS[t]) { o = makeNewAnimal(t, x, T); if (o.x + o.w > end) return null; obstacles.push(o); return o; }
+  if (NEW_OBJECTS[t]) {
+    o = NEW_OBJECTS[t].make(x, T); if (o.x + o.w > end) return null; obstacles.push(o);
+    if (t === 'trampoline') for (let i = -1; i <= 1; i++) gummies.push({ x: o.x + o.w / 2 + 40 + i * 34, y: T - 250 - (i === 0 ? 20 : 0), got: false });
+    return o;
+  }
   if (t === 'ac') o = { t, x, y: T - 34, w: 48, h: 34, solid: true };
   else if (t === 'crate') o = { t, x, y: T - 40, w: 40, h: 40, solid: true, brk: true };
   else if (t === 'stack') o = { t, x, y: T - 80, w: 40, h: 80, solid: true, brk: true };
@@ -550,7 +689,7 @@ function die(why) {
     eagle: 'Snatched by an eagle! (Squish flat as it swoops)', pipe: 'Clonked a pipe!', solar: 'Crashed into a solar panel!',
     barrel: 'Flattened by a rolling barrel! (Ball mode smashes it)', pigeons: 'Pecked by pigeons! (Squish under or jump over)', sign: 'Sign slap! (Hold Squish to slide under)', duct: 'Clanged into a hanging duct! (Hold Squish to slide under)',
   };
-  deathMsg = msgs[why] || (NEW_ANIMALS[why] && NEW_ANIMALS[why].msg) || 'Splat!';
+  deathMsg = msgs[why] || (NEW_ANIMALS[why] && NEW_ANIMALS[why].msg) || (NEW_OBJECTS[why] && NEW_OBJECTS[why].msg) || 'Splat!';
   const sc = score();
   if (sc > best) { best = sc; try { localStorage.setItem('wobbly-best', String(best)); } catch (e) {} }
 }
@@ -692,6 +831,8 @@ function step(dt) {
       if (o.y > H + 60) o.dead = true;
       if (dx < 300 && dx > 0 && !o.barked && !o.flee) { o.barked = true; animalCry(o); }
     }
+    if (o.t === 'tire') { o.y = o.baseY - Math.abs(Math.sin(o.x * 0.016)) * 90; o.rot = (o.rot || 0) - 210 * dt / 17; }
+    if (o.t === 'mower') o.x = o.x0 + Math.sin(time * 1.3 + o.ph) * 110;
     if (o.t === 'pigeons') {
       if (!o.flee && powerIs('buff') && o.x - P.x < 430 && o.x - P.x > -20) scare(o);
       if (o.flee) { o.vx = curSpeed() + P.bonus + 420; o.y -= 260 * dt; if (o.y < -40) o.dead = true; }
@@ -706,12 +847,23 @@ function step(dt) {
     if (o.t === 'vent' && ventOn(o) && r > o.x + 4 && l < o.x + o.w - 4 && bt > o.y - 140 && t < o.y) { die('vent'); return; }
     if (r > o.x && l < o.x + o.w && bt > o.y && t < o.y + o.h) {
       if (o.flee) continue;
-      if (powerIs('tiny') && (o.t === 'sign' || o.t === 'duct' || o.t === 'pigeons')) continue;
+      if (powerIs('tiny') && (o.t === 'sign' || o.t === 'duct' || o.t === 'pigeons' || o.t === 'laundry')) continue;
+      if (o.helper === 'boost') { if (P.ground) P.bonus = Math.max(P.bonus, 320); continue; }   // conveyor: zoom!
+      if (o.helper === 'lift') { P.vy = Math.min(P.vy, -820); P.ground = false; P.flat = false; continue; }   // fan blows you up
+      if (o.t === 'wreck') {
+        const [bx, by] = NEW_OBJECTS.wreck.ball(o);
+        const nx = clamp(bx, l, r), ny = clamp(by, t, bt);
+        if ((nx - bx) ** 2 + (ny - by) ** 2 < 20 * 20) { if (powerIs('buff')) buffHit(o); else { die('wreck'); return; } }
+        continue;
+      }
       const flyer = o.fly || o.t === 'eagle' || o.t === 'pigeons';
       if (P.flat && flyer) continue;                            // squished flat: flyers swoop right over you
       if (powerIs('buff') && (isAnimal(o) || o.t === 'pigeons')) { scare(o); continue; }   // buff scares off any animal
       if (isAnimal(o)) { die(o.t); return; }                   // animals always get you
       if (powerIs('buff') && !(o.solid && P.prevY - P.leg <= o.y + 6 && P.vy >= 0)) { buffHit(o); continue; }
+      if (o.bounce) {   // trampoline: touch it and boing!
+        P.y = o.y + P.leg; P.vy = -1250; P.air = 0; P.ground = false; o.sq = 1; impulse('jump', 140); sfx.jump(); sfx.dbl(); continue;
+      }
       if (o.solid && P.prevY - P.leg <= o.y + 6 && P.vy >= 0) { P.y = o.y + P.leg; landed = true; }
       else if (o.brk && P.shape === 'ball' && !P.flat) smash(o);
       else { die(o.t); return; }
@@ -1159,6 +1311,7 @@ function drawObstacle(o) {
   if (o.dead) return;
   const x = o.x - camX;
   if (x > W + 40 || x + o.w < -40) return;
+  if (NEW_OBJECTS[o.t]) { NEW_OBJECTS[o.t].draw(o, x); return; }
   if (o.t === 'ac') {
     ctx.fillStyle = '#8f98b3'; ctx.fillRect(x, o.y, o.w, o.h);
     ctx.fillStyle = '#6d7590'; ctx.fillRect(x, o.y + o.h - 6, o.w, 6);
@@ -2055,7 +2208,8 @@ function render() {
     ctx.shadowBlur = 0;
     const na = Object.keys(NEW_ANIMALS).find(k => NEW_ANIMALS[k].lv === level);
     const extra = level === 2 ? 'cats, bobcats & eagles' : na ? `new: ${na === 'robodog' ? 'robo-dogs' : na === 'bats' ? 'bats' : na + 's'}` : '';
-    centerText(`${THEMES[level - 1].name} · ${extra} · harder!`, 200, 18, '#ffffff', 'normal');
+    const no = Object.keys(NEW_OBJECTS).find(k => NEW_OBJECTS[k].lv === level);
+    centerText(`${THEMES[level - 1].name} · ${extra}${no ? ' + ' + NEW_OBJECTS[no].label : ''} · harder!`, 200, 18, '#ffffff', 'normal');
     centerText(level < 10 ? `Next level at ${(level * 1000).toLocaleString()} · win at 10,000` : 'Final level! Reach 10,000 to win', 228, 13, 'rgba(255,255,255,0.7)', 'normal');
     ctx.globalAlpha = 1;
   }

@@ -1950,7 +1950,7 @@ function drawHUD() {
     ctx.fillText(`${Math.ceil(P.power.t)}s`, 198, 92);
   }
   ctx.fillStyle = level > 1 ? rgb(tint(THEMES[level - 1].capLine, 0.2)) : 'rgba(255,255,255,0.5)'; ctx.textAlign = 'right';
-  ctx.font = 'bold 11px system-ui, sans-serif'; ctx.fillText(`LEVEL ${level}`, 238, 60); ctx.font = '13px system-ui, sans-serif';
+  ctx.font = 'bold 11px system-ui, sans-serif'; ctx.fillText(`LEVEL ${level} / 10`, 238, 60); ctx.font = '13px system-ui, sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.5)';
   ctx.fillText(`best ${best}`, 238, 36);
 
@@ -2051,7 +2051,7 @@ function render() {
     const a = Math.min(1, levelBanner, (3.2 - levelBanner) * 3);
     ctx.globalAlpha = a;
     ctx.shadowColor = '#78dcff'; ctx.shadowBlur = 20;
-    centerText(`LEVEL ${level}`, 150, 64, rgb(tint(THEMES[level - 1].capLine, 0.4)), '900');
+    centerText(`LEVEL ${level} / 10`, 150, 64, rgb(tint(THEMES[level - 1].capLine, 0.4)), '900');
     ctx.shadowBlur = 0;
     const na = Object.keys(NEW_ANIMALS).find(k => NEW_ANIMALS[k].lv === level);
     const extra = level === 2 ? 'cats, bobcats & eagles' : na ? `new: ${na === 'robodog' ? 'robo-dogs' : na === 'bats' ? 'bats' : na + 's'}` : '';
